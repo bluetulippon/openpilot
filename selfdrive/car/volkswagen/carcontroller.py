@@ -128,7 +128,7 @@ class CarController():
     if frame % P.LDW_STEP == 0:
       #Pon Fulltime LKA (add condition acc available trigger LKA)
       hudEnabled = True if (enabled or availableFulltimeLka) and not CS.out.standstill else False
-      if visual_alert in [VisualAlert.steerRequired, VisualAlert.ldw]:
+      if visual_alert == car.CarControl.HUDControl.VisualAlert.steerRequired:
         hud_alert = MQB_LDW_MESSAGES["laneAssistTakeOverSilent"]
       else:
         hud_alert = MQB_LDW_MESSAGES["none"]

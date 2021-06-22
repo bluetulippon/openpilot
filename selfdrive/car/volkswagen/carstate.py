@@ -15,7 +15,7 @@ class CarState(CarStateBase):
     elif CP.transmissionType == TransmissionType.direct:
       self.shifter_values = can_define.dv["EV_Gearshift"]["GearPosition"]
     self.hca_status_values = can_define.dv["LH_EPS_03"]["EPS_HCA_Status"]
-    print("[PONTEST][carstate.py][__init__()] self.hca_status_values", self.hca_status_values)
+    #print("[PONTEST][carstate.py][__init__()] self.hca_status_values", self.hca_status_values)
     self.buttonStates = BUTTON_STATES.copy()
 
   def update(self, pt_cp, cam_cp, ext_cp, trans_type):
@@ -45,7 +45,7 @@ class CarState(CarStateBase):
 
     # Verify EPS readiness to accept steering commands
     hca_status = self.hca_status_values.get(pt_cp.vl["LH_EPS_03"]["EPS_HCA_Status"])
-    print("[PONTEST][carstate.py][update()] hca_status", hca_status)
+    #print("[PONTEST][carstate.py][update()] hca_status", hca_status)
     ret.steerError = hca_status in ["DISABLED", "FAULT"]
     ret.steerWarning = hca_status in ["INITIALIZING", "REJECTED"]
 
@@ -243,9 +243,9 @@ class CarState(CarStateBase):
       # Extended CAN devices other than the camera are here on CANBUS.pt
       signals += MqbExtraSignals.fwd_radar_signals
       checks += MqbExtraSignals.fwd_radar_checks
-    if CP.enableBsm:
-      signals += MqbExtraSignals.bsm_radar_signals
-      checks += MqbExtraSignals.bsm_radar_checks
+      if CP.enableBsm:
+        signals += MqbExtraSignals.bsm_radar_signals
+        checks += MqbExtraSignals.bsm_radar_checks
 
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, CANBUS.pt)
 
@@ -263,7 +263,7 @@ class CarState(CarStateBase):
 
     checks = [
       # sig_address, frequency
-      ("LDW_02", 10)        # From R242 Driver assistance camera
+      # ("LDW_02", 10)        # From R242 Driver assistance camera
     ]
 
     if CP.networkLocation == NetworkLocation.gateway:
