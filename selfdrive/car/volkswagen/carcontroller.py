@@ -1,10 +1,10 @@
 from cereal import car
+from common.params import Params, put_nonblocking
 from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.volkswagen import volkswagencan
-from selfdrive.car.volkswagen.values import DBC, CANBUS, MQB_LDW_MESSAGES, BUTTON_STATES, CarControllerParams
+from selfdrive.car.volkswagen.values import DBC, CANBUS, MQB_LDW_MESSAGES, BUTTON_STATES, CarControllerParams, NetworkLocation
 from opendbc.can.packer import CANPacker
 
-VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 class CarController():
   def __init__(self, dbc_name, CP, VM):
@@ -19,9 +19,15 @@ class CarController():
     self.graMsgStartFramePrev = 0
     self.graMsgBusCounterPrev = 0
 
+    if CP.networkLocation == NetworkLocation.fwdCamera:
+      self.ext_can = CANBUS.pt
+    else:
+      self.ext_can = CANBUS.cam
+
     self.steer_rate_limited = False
 
-  def update(self, enabled, CS, frame, actuators, visual_alert, left_lane_visible, right_lane_visible, left_lane_depart, right_lane_depart):
+  #Pon Fulltime LKA
+  def update(self, enabled, availableFulltimeLka, CS, frame, actuators, visual_alert, left_lane_visible, right_lane_visible, left_lane_depart, right_lane_depart):
     """ Controls thread """
 
     P = CarControllerParams
@@ -44,8 +50,10 @@ class CarController():
 
       # FAULT AVOIDANCE: HCA must not be enabled at standstill. Also stop
       # commanding HCA if there's a fault, so the steering rack recovers.
-      if enabled and not (CS.out.standstill or CS.out.steerError or CS.out.steerWarning):
-
+      #Pon Fulltime LKA (add condition acc available trigger LKA)
+      #if enabled and not (CS.out.standstill or CS.out.steerError or CS.out.steerWarning):
+      #if (enabled or availableFulltimeLka) and not (CS.out.standstill or CS.out.steerError or CS.out.steerWarning):
+      if (enabled or availableFulltimeLka):
         # FAULT AVOIDANCE: Requested HCA torque must not exceed 3.0 Nm. This
         # is inherently handled by scaling to STEER_MAX. The rack doesn't seem
         # to care about up/down rate, but we have some evidence it may do its
@@ -53,6 +61,7 @@ class CarController():
         new_steer = int(round(actuators.steer * P.STEER_MAX))
         apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, P)
         self.steer_rate_limited = new_steer != apply_steer
+        #print("[PONTEST] availableFulltimeLka=", availableFulltimeLka, " new_steer=", new_steer, " apply_steer=", apply_steer, " actuators.steer=", actuators.steer)
 
         # FAULT AVOIDANCE: HCA must not be enabled for >360 seconds. Sending
         # a single frame with HCA disabled is an effective workaround.
@@ -62,9 +71,11 @@ class CarController():
           # many steer torque direction changes. This could be expanded with
           # a small dead-zone to capture all zero crossings, but not seeing a
           # major need at this time.
+          #print("[PONTEST][carcontroller.py][update()] 0")
           hcaEnabled = False
           self.hcaEnabledFrameCount = 0
         else:
+          #print("[PONTEST][carcontroller.py][update()] 1")
           self.hcaEnabledFrameCount += 1
           if self.hcaEnabledFrameCount >= 118 * (100 / P.HCA_STEP):  # 118s
             # The Kansas I-70 Crosswind Problem: if we truly do need to steer
@@ -73,9 +84,11 @@ class CarController():
             # disabled flag, and keep sending non-zero torque, which keeps the
             # Panda torque rate limiting safety happy. Do so 3x within the 360
             # second window for safety and redundancy.
+            #print("[PONTEST][carcontroller.py][update()] 2")
             hcaEnabled = False
             self.hcaEnabledFrameCount = 0
           else:
+            #print("[PONTEST][carcontroller.py][update()] 3")
             hcaEnabled = True
             # FAULT AVOIDANCE: HCA torque must not be static for > 6 seconds.
             # This is to detect the sending camera being stuck or frozen. OP
@@ -95,6 +108,8 @@ class CarController():
         hcaEnabled = False
         apply_steer = 0
 
+      #print("[PONTEST] hcaEnabled", hcaEnabled)
+
       self.apply_steer_last = apply_steer
       idx = (frame / P.HCA_STEP) % 16
       can_sends.append(volkswagencan.create_mqb_steering_control(self.packer_pt, CANBUS.pt, apply_steer,
@@ -111,13 +126,15 @@ class CarController():
     # filters LDW_02 from the factory camera and OP emits LDW_02 at 10Hz.
 
     if frame % P.LDW_STEP == 0:
+      #Pon Fulltime LKA (add condition acc available trigger LKA)
+      hudEnabled = True if (enabled or availableFulltimeLka) and not CS.out.standstill else False
       if visual_alert in [VisualAlert.steerRequired, VisualAlert.ldw]:
         hud_alert = MQB_LDW_MESSAGES["laneAssistTakeOverSilent"]
       else:
         hud_alert = MQB_LDW_MESSAGES["none"]
 
 
-      can_sends.append(volkswagencan.create_mqb_hud_control(self.packer_pt, CANBUS.pt, enabled,
+      can_sends.append(volkswagencan.create_mqb_hud_control(self.packer_pt, CANBUS.pt, hudEnabled,
                                                             CS.out.steeringPressed, hud_alert, left_lane_visible,
                                                             right_lane_visible, CS.ldw_lane_warning_left,
                                                             CS.ldw_lane_warning_right, CS.ldw_side_dlc_tlc,
@@ -179,7 +196,7 @@ class CarController():
         if self.graMsgSentCount == 0:
           self.graMsgStartFramePrev = frame
         idx = (CS.graMsgBusCounter + 1) % 16
-        can_sends.append(volkswagencan.create_mqb_acc_buttons_control(self.packer_pt, CANBUS.pt, self.graButtonStatesToSend, CS, idx))
+        can_sends.append(volkswagencan.create_mqb_acc_buttons_control(self.packer_pt, self.ext_can, self.graButtonStatesToSend, CS, idx))
         self.graMsgSentCount += 1
         if self.graMsgSentCount >= P.GRA_VBP_COUNT:
           self.graButtonStatesToSend = None

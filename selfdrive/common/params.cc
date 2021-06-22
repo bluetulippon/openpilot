@@ -219,6 +219,18 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"Offroad_NvmeMissing", CLEAR_ON_MANAGER_START},
     {"ForcePowerDown", CLEAR_ON_MANAGER_START},
     {"JoystickDebugMode", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_OFF},
+    //Pon Add setttings parameter
+    {"IsVagInfoboxEnabled", PERSISTENT},
+    {"IsVagInfobarEnabled", PERSISTENT},
+    {"IsVagBlinkerEnabled", PERSISTENT},
+    {"IsVagBlindspotEnabled", PERSISTENT},
+    {"IsVagLeadCarEnabled", PERSISTENT},
+    {"IsVagFulltimeLkaEnabled", PERSISTENT},
+    {"IsVagFulltimeLkaDisableWithBlinker", PERSISTENT},
+    {"IsVagFulltimeLkaDisableWithBrake", PERSISTENT},
+    {"IsVagSpeedCameraEnabled", PERSISTENT},
+    {"IsVagSaccEnabled", PERSISTENT},
+    {"IsVagDevelopModeEnabled", PERSISTENT},
 };
 
 } // namespace

@@ -23,11 +23,15 @@ class LatControlPID():
     angle_steers_des_no_offset = math.degrees(VM.get_steer_from_curvature(-lat_plan.curvature, CS.vEgo))
     angle_steers_des = angle_steers_des_no_offset + params.angleOffsetDeg
 
-    if CS.vEgo < 0.3 or not active:
+    #Pon Fulltime LKA
+    #if CS.vEgo < 0.3 or not active:
+    if (CS.vEgo < 0.3 or not active) and (CS.vEgo < 0.3 or not CS.cruiseState.available):
+      #print("[PONTEST][latcontrol_pid.py][update()] NOT CS.vEgo=", CS.vEgo, " CS.cruiseState.available=", CS.cruiseState.available)
       output_steer = 0.0
       pid_log.active = False
       self.pid.reset()
     else:
+      #print("[PONTEST][latcontrol_pid.py][update()] FLKA get steer")
       steers_max = get_steer_max(CP, CS.vEgo)
       self.pid.pos_limit = steers_max
       self.pid.neg_limit = -steers_max

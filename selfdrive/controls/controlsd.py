@@ -41,7 +41,7 @@ Desire = log.LateralPlan.Desire
 LaneChangeState = log.LateralPlan.LaneChangeState
 LaneChangeDirection = log.LateralPlan.LaneChangeDirection
 EventName = car.CarEvent.EventName
-
+GearShifter = car.CarState.GearShifter
 
 class Controls:
   def __init__(self, sm=None, pm=None, can_sock=None):
@@ -290,7 +290,9 @@ class Controls:
         if not self.sm['liveLocationKalman'].gpsOK and (self.distance_traveled > 1000) and \
           (not TICI or self.enable_lte_onroad):
           # Not show in first 1 km to allow for driving out of garage. This event shows after 5 minutes
-          self.events.add(EventName.noGps)
+          #Pon Disable no gps alert
+          #self.events.add(EventName.noGps)
+          print("NO GPS")
       if not self.sm.all_alive(self.camera_packets):
         self.events.add(EventName.cameraMalfunction)
       if self.sm['modelV2'].frameDropPerc > 20:
@@ -340,6 +342,8 @@ class Controls:
       self.mismatch_counter += 1
 
     self.distance_traveled += CS.vEgo * DT_CTRL
+
+    #print("[PONTEST][controlsd.py][data_sample()] self.sm['pandaState'].controlsAllowed=", self.sm['pandaState'].controlsAllowed)
 
     return CS
 
@@ -456,6 +460,7 @@ class Controls:
 
       # Steering PID loop and lateral MPC
       actuators.steer, actuators.steeringAngleDeg, lac_log = self.LaC.update(self.active, CS, self.CP, self.VM, params, lat_plan)
+      #print("[PONTEST][controlsd.py][publish_logs()] actuators.steer=", actuators.steer, " actuators.steeringAngleDeg=", actuators.steeringAngleDeg)
     else:
       lac_log = log.ControlsState.LateralDebugState.new_message()
       if self.sm.rcv_frame['testJoystick'] > 0 and self.active:
@@ -546,6 +551,20 @@ class Controls:
     self.AM.add_many(self.sm.frame, alerts, self.enabled)
     self.AM.process_alerts(self.sm.frame, clear_event)
     CC.hudControl.visualAlert = self.AM.visual_alert
+
+    #Pon Fulltime LKA
+    params = Params()
+    is_vag_fulltime_lka_enabled = params.get_bool("IsVagFulltimeLkaEnabled")
+    is_vag_fulltime_lka_disabled_with_blinker = params.get_bool("IsVagFulltimeLkaDisableWithBlinker")
+    is_vag_fulltime_lka_disable_with_brake = params.get_bool("IsVagFulltimeLkaDisableWithBrake")
+    CC.availableFulltimeLka = bool(CS.cruiseState.available \
+                              and bool(is_vag_fulltime_lka_enabled) \
+                              and not bool(is_vag_fulltime_lka_disabled_with_blinker and (CS.leftBlinker or CS.rightBlinker)) \
+                              and not bool(is_vag_fulltime_lka_disable_with_brake and CS.brakePressed) \
+                              and bool(bool(CS.gearShifter==GearShifter.drive) \
+                              or bool(CS.gearShifter==GearShifter.sport) \
+                              or bool(CS.gearShifter==GearShifter.manumatic)))
+    #print("[PONTEST][controlsd.py][publish_logs()] CC.availableFulltimeLka=", CC.availableFulltimeLka)
 
     if not self.read_only and self.initialized:
       # send car controls over can

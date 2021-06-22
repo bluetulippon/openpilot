@@ -2,6 +2,7 @@
 # PQ35/PQ46/NMS, and any future MLB, to come later.
 
 def create_mqb_steering_control(packer, bus, apply_steer, idx, lkas_enabled):
+  #print("[PONTEST][volkswagencan.py][create_mqb_steering_control()] lkas_enabled", lkas_enabled)
   values = {
     "SET_ME_0X3": 0x3,
     "Assist_Torque": abs(apply_steer),
