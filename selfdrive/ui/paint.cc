@@ -17,10 +17,12 @@
 #include <nanovg_gl.h>
 #include <nanovg_gl_utils.h>
 
+#include "selfdrive/common/params.h"
 #include "selfdrive/common/timing.h"
 #include "selfdrive/common/util.h"
 #include "selfdrive/hardware/hw.h"
 
+#include "selfdrive/ui/paint_extend.h"
 #include "selfdrive/ui/ui.h"
 
 static void ui_draw_text(const UIState *s, float x, float y, const char *string, float size, NVGcolor color, const char *font_name) {
@@ -239,6 +241,9 @@ static void ui_draw_vision_header(UIState *s) {
   ui_draw_vision_maxspeed(s);
   ui_draw_vision_speed(s);
   ui_draw_vision_event(s);
+
+  //Pon Add C2 HUD UI
+  ui_draw_hud(s);
 }
 
 static void ui_draw_vision_frame(UIState *s) {
@@ -294,6 +299,13 @@ void ui_draw(UIState *s, int w, int h) {
 
   nvgEndFrame(s->vg);
   glDisable(GL_BLEND);
+
+  //Pon Add C2 HUD UI - hook settings
+  Params params;
+  bool IsVagDevelopModeEnabled = params.getBool("IsVagDevelopModeEnabled");
+  if(IsVagDevelopModeEnabled) {
+    ui_draw_hud(s);
+  }
 }
 
 void ui_draw_image(const UIState *s, const Rect &r, const char *name, float alpha) {
