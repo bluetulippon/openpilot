@@ -325,77 +325,80 @@ void ui_draw_blindspot(UIState *s) {
   }
 }
 
-//static bool PreviousSpeedCameraDetected = false;
+static bool PreviousSpeedCameraDetected = false;
 void ui_draw_speedcamera(UIState *s) {
-  //char speedLimit[16];
-  //char distance[16];
-  //char value[64];
+  char speedLimit[16];
+  char distance[16];
+  char value[64];
   int sidebar_fit_x = 0;
 
   //Fit sidebar screen
   sidebar_fit_x = s->viz_rect.x + hud_left_2_x;
-#if 0
-  if ((*s->sm).alive("speedCamera") && (*s->sm).valid("speedCamera") && (*s->sm).updated("speedCamera")) {
+#if 1
+  try {
+    if ((*s->sm).alive("speedCamera") && (*s->sm).valid("speedCamera") && (*s->sm).updated("speedCamera")) {
+      snprintf(value, sizeof(value), "Distance=%f, Angle=%f, VDirect=%d, SDirect=%d", \
+               (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance(), \
+               (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleTrackAngle(), \
+               (int) (*s->sm)["speedCamera"].getSpeedCamera().getVehicleDirect(), \
+               (int) (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getDirect());
+      ui_draw_hud_text(s, sidebar_fit_x, 5, value, 64, COLOR_YELLOW);
 
-    snprintf(value, sizeof(value), "Distance=%f, Angle=%f, VDirect=%d, SDirect=%d", \
-             (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance(), \
-             (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleTrackAngle(), \
-             (int) (*s->sm)["speedCamera"].getSpeedCamera().getVehicleDirect(), \
-             (int) (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getDirect());
-    ui_draw_hud_text(s, sidebar_fit_x, 5, value, 64, COLOR_YELLOW);
+      snprintf(value, sizeof(value), "V latitude=%f, longitude=%f", \
+               (*s->sm)["speedCamera"].getSpeedCamera().getVehicleLatitude(), \
+               (*s->sm)["speedCamera"].getSpeedCamera().getVehicleLongitude());
+      ui_draw_hud_text(s, sidebar_fit_x, 800, value, 80, COLOR_YELLOW);
 
-    snprintf(value, sizeof(value), "V latitude=%f, longitude=%f", \
-             (*s->sm)["speedCamera"].getSpeedCamera().getVehicleLatitude(), \
-             (*s->sm)["speedCamera"].getSpeedCamera().getVehicleLongitude());
-    ui_draw_hud_text(s, sidebar_fit_x, 800, value, 80, COLOR_YELLOW);
+      snprintf(value, sizeof(value), "C latitude=%f, longitude=%f", \
+               (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getLatitude(), \
+               (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getLongitude());
+      ui_draw_hud_text(s, sidebar_fit_x, 900, value, 80, COLOR_YELLOW);
 
-    snprintf(value, sizeof(value), "C latitude=%f, longitude=%f", \
-             (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getLatitude(), \
-             (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getLongitude());
-    ui_draw_hud_text(s, sidebar_fit_x, 900, value, 80, COLOR_YELLOW);
-
-    if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 25.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_25");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 30.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_30");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 40.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_40");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 50.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_50");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 60.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_60");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 70.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_70");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 80.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_80");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 90.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_90");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 100.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_100");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 110.0) {
-      snprintf(speedLimit, sizeof(speedLimit), "speed_limit_110");
-    }
-
-    if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.1) {
-      snprintf(distance, sizeof(distance), "100M");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.2) {
-      snprintf(distance, sizeof(distance), "200M");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.3) {
-      snprintf(distance, sizeof(distance), "300M");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.4) {
-      snprintf(distance, sizeof(distance), "400M");
-    } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.5) {
-      snprintf(distance, sizeof(distance), "500M");
-    }
-
-    if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraDetected()) {
-      ui_draw_speed_image(s, 1650, 500, 200, 200, speedLimit);
-      ui_draw_hud_text(s, 1700, 700, distance, 64, COLOR_YELLOW);
-      if(PreviousSpeedCameraDetected == false) {
-        //PONTEST s->sound->play(cereal::CarControl::HUDControl::AudibleAlert(4));
+      if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 25.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_25");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 30.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_30");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 40.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_40");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 50.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_50");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 60.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_60");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 70.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_70");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 80.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_80");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 90.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_90");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 100.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_100");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getSpeedLimitation() == 110.0) {
+        snprintf(speedLimit, sizeof(speedLimit), "speed_limit_110");
       }
+
+      if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.1) {
+        snprintf(distance, sizeof(distance), "100M");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.2) {
+        snprintf(distance, sizeof(distance), "200M");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.3) {
+        snprintf(distance, sizeof(distance), "300M");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.4) {
+        snprintf(distance, sizeof(distance), "400M");
+      } else if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraMapPosition().getVehicleDistance() < 0.5) {
+        snprintf(distance, sizeof(distance), "500M");
+      }
+
+      if((*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraDetected()) {
+        ui_draw_speed_image(s, 1650, 500, 200, 200, speedLimit);
+        ui_draw_hud_text(s, 1700, 700, distance, 64, COLOR_YELLOW);
+        if(PreviousSpeedCameraDetected == false) {
+          //s->sound->play(cereal::CarControl::HUDControl::AudibleAlert(4));
+        }
+      }
+      PreviousSpeedCameraDetected = (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraDetected();
     }
-    PreviousSpeedCameraDetected = (*s->sm)["speedCamera"].getSpeedCamera().getSpeedCameraDetected();
+  } catch (std::exception &e) {
+    LOGE("[PONTEST][%s][%d][%s] speedCamera Execption: %s", __FILE__, __LINE__, __FUNCTION__, e.what());
   }
 #endif
 }

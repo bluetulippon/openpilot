@@ -55,11 +55,11 @@ void HomeWindow::offroadTransition(bool offroad) {
     slayout->setCurrentWidget(onroad);
   }
   else {
-  if (offroad) {
-    slayout->setCurrentWidget(home);
-  } else {
-    slayout->setCurrentWidget(onroad);
-  }
+    if (offroad) {
+      slayout->setCurrentWidget(home);
+    } else {
+      slayout->setCurrentWidget(onroad);
+    }
   }
 
   sidebar->setVisible(offroad);
