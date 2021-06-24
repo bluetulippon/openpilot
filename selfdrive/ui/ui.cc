@@ -208,19 +208,6 @@ static void update_state(UIState *s) {
 
     scene.light_sensor = std::clamp<float>((1023.0 / max_lines) * (max_lines - camera_state.getIntegLines() * gain), 0.0, 1023.0);
   }
-#if 1//PONTEST Add C2 HUD UI
-  if (scene.started && sm.updated("controlsState")) {
-    scene.controls_state = sm["controlsState"].getControlsState();
-  }
-  if (sm.updated("carState")) {
-    scene.car_state = sm["carState"].getCarState();
-  }
-#endif
-#if 0 //PONTEST SACC
-  if (sm.updated("speedCamera")) {
-    scene.speed_camera = sm["speedCamera"].getSpeedCamera();
-  }
-#endif
   scene.started = sm["deviceState"].getDeviceState().getStarted();
 }
 

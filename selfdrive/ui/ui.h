@@ -85,27 +85,12 @@ typedef struct {
   int cnt;
 } line_vertices_data;
 
-//Pon Add C2 HUD UI
-typedef struct UIExtend {
-  int blinker_blinkingrate;
-} UIExtend;
-
 typedef struct UIScene {
 
   mat3 view_from_calib;
   bool world_objects_visible;
 
   cereal::PandaState::PandaType pandaType;
-
-  cereal::DeviceState::Reader deviceState;
-  cereal::RadarState::LeadData::Reader lead_data[2];
-  cereal::CarState::Reader car_state;
-  cereal::CarParams::Reader car_params;
-  cereal::CarControl::Reader car_control;
-  cereal::ControlsState::Reader controls_state;
-  cereal::DriverState::Reader driver_state;
-  cereal::DriverMonitoringState::Reader dmonitoring_state;
-  cereal::SpeedCamera::Reader speed_camera;
 
   // gps
   int satelliteCount;
@@ -126,9 +111,6 @@ typedef struct UIScene {
   float light_sensor, accel_sensor, gyro_sensor;
   bool started, ignition, is_metric, longitudinal_control, end_to_end;
   uint64_t started_frame;
-
-  //Pon Add C2 HUD UI
-  UIExtend ui_extend;
 } UIScene;
 
 typedef struct UIState {

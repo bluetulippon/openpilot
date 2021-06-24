@@ -46,11 +46,22 @@ HomeWindow::HomeWindow(QWidget* parent) : QWidget(parent) {
 }
 
 void HomeWindow::offroadTransition(bool offroad) {
+  //Pon Add develop mode screen
+  bool IsVagDevelopModeEnabled = true;
+  Params params;
+  IsVagDevelopModeEnabled = params.getBool("IsVagDevelopModeEnabled");
+
+  if(IsVagDevelopModeEnabled) {
+    slayout->setCurrentWidget(onroad);
+  }
+  else {
   if (offroad) {
     slayout->setCurrentWidget(home);
   } else {
     slayout->setCurrentWidget(onroad);
   }
+  }
+
   sidebar->setVisible(offroad);
   emit offroadTransitionSignal(offroad);
 }

@@ -27,7 +27,6 @@
 QWidget * vag_panel() {
   QVBoxLayout *vag_list = new QVBoxLayout();
   vag_list->setSpacing(30);
-#if 0
   vag_list->addWidget(new QLabel("Enable HUD"));
 
   ParamControl* paramControlIsVagInfoboxEnabled = new ParamControl("IsVagInfoboxEnabled",
@@ -73,7 +72,6 @@ QWidget * vag_panel() {
                                             ""
                                             ));
   vag_list->addWidget(horizontal_line());
-#endif
   vag_list->addWidget(new ParamControl("IsVagFulltimeLkaEnabled",
                                             "Enable Fulltime LKA",
                                             "Fulltime enable LKA without ACC engaged",
