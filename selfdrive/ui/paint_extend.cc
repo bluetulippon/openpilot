@@ -265,9 +265,12 @@ void ui_draw_infobar(UIState *s) {
   }
 }
 
+#define BLINKING_RATE 96
+static int blinking_rate = BLINKING_RATE;
 void ui_draw_blinker(UIState *s) {
   const int viz_blinker_w = 280;
   const int viz_blinker_x = s->viz_rect.centerX() - viz_blinker_w/2;
+  int blinking_rate_half = BLINKING_RATE/2;
 
   if ((*s->sm).updated("carState")) {
     const bool leftBlinker = (*s->sm)["carState"].getCarState().getLeftBlinker();
@@ -279,7 +282,7 @@ void ui_draw_blinker(UIState *s) {
       nvgLineTo(s->vg, viz_blinker_x - viz_blinker_w/2, s->viz_rect.y + header_h/4 + header_h/4);
       nvgLineTo(s->vg, viz_blinker_x, s->viz_rect.y + header_h/2 + header_h/4);
       nvgClosePath(s->vg);
-      nvgFillColor(s->vg, nvgRGBA(0, 255, 0, 30));
+      nvgFillColor(s->vg, nvgRGBA(218,202,37,blinking_rate>=blinking_rate_half?190:30));
       nvgFill(s->vg);
     }
     if(rightBlinker) {
@@ -288,8 +291,12 @@ void ui_draw_blinker(UIState *s) {
       nvgLineTo(s->vg, viz_blinker_x+viz_blinker_w + viz_blinker_w/2, s->viz_rect.y + header_h/4 + header_h/4);
       nvgLineTo(s->vg, viz_blinker_x+viz_blinker_w, s->viz_rect.y + header_h/2 + header_h/4);
       nvgClosePath(s->vg);
-      nvgFillColor(s->vg, nvgRGBA(0, 255, 0, 30));
+      nvgFillColor(s->vg, nvgRGBA(218,202,37,blinking_rate>=blinking_rate_half?190:30));
       nvgFill(s->vg);
+    }
+    if(leftBlinker || rightBlinker) {
+      blinking_rate -= 3;
+      if(blinking_rate<0) blinking_rate = BLINKING_RATE;
     }
   }
 }
