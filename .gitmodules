@@ -1,20 +1,20 @@
 [submodule "panda"]
 	path = panda
 	url = ../../bluetulippon/panda.git
-	branch = v0.8.6_20210612_2340_develop
+	branch = v0.8.6_20210612_2340_develop_speed_cam
 [submodule "opendbc"]
 	path = opendbc
 	url = ../../bluetulippon/opendbc.git
-	branch = v0.8.6_20210612_2340_develop
+	branch = v0.8.6_20210612_2340_develop_speed_cam
 [submodule "laika_repo"]
 	path = laika_repo
 	url = ../../bluetulippon/laika.git
-	branch = v0.8.6_20210612_2340_develop
+	branch = v0.8.6_20210612_2340_develop_speed_cam
 [submodule "cereal"]
 	path = cereal
 	url = ../../bluetulippon/cereal.git
-	branch = v0.8.6_20210612_2340_develop
+	branch = v0.8.6_20210612_2340_develop_speed_cam
 [submodule "rednose_repo"]
 	path = rednose_repo
 	url = ../../bluetulippon/rednose.git
-	branch = v0.8.6_20210612_2340_develop
+	branch = v0.8.6_20210612_2340_develop_speed_cam
