@@ -141,11 +141,11 @@ class SpeedCamera:
     self.ConcentricLayer1PositionList.sort(key = lambda s: s.Distance)
     self.ConcentricLayer2PositionList.sort(key = lambda s: s.Distance)
 
-    print("[PONTEST][speedcamerad.py][recalculate_concentric_layer_all()] len(self.ConcentricLayer1PositionList)=", len(self.ConcentricLayer1PositionList))
+    #print("[PONTEST][speedcamerad.py][recalculate_concentric_layer_all()] len(self.ConcentricLayer1PositionList)=", len(self.ConcentricLayer1PositionList))
     #for ConcentricLayer1Item in self.ConcentricLayer1PositionList:
     #  print("ConcentricLayer1Item=", ConcentricLayer1Item.Latitude, ConcentricLayer1Item.Longitude, ConcentricLayer1Item.Direct, ConcentricLayer1Item.SpeedLimit, ConcentricLayer1Item.RoadType, ConcentricLayer1Item.Distance, ConcentricLayer1Item.Angle)
 
-    print("[PONTEST][speedcamerad.py][recalculate_concentric_layer_all()] len(self.ConcentricLayer2PositionList)=", len(self.ConcentricLayer2PositionList))
+    #print("[PONTEST][speedcamerad.py][recalculate_concentric_layer_all()] len(self.ConcentricLayer2PositionList)=", len(self.ConcentricLayer2PositionList))
     #for ConcentricLayer2Item in self.ConcentricLayer2PositionList:
     #  print("ConcentricLayer2Item=", ConcentricLayer2Item.Latitude, ConcentricLayer2Item.Longitude, ConcentricLayer2Item.Direct, ConcentricLayer2Item.SpeedLimit, ConcentricLayer2Item.RoadType, ConcentricLayer1Item.Distance, ConcentricLayer1Item.Angle)
 
@@ -260,12 +260,12 @@ class SpeedCamera:
           self.SpeedCameraDetected = False
           sc_send.speedCamera.speedCameraDetected = False
 
-        print("SpeedCamItem=", self.VehicleTrackIndex, VehicleLatitude, VehicleLongitude, VehicleSpeed, \
-                sc_send.speedCamera.vehicleDirect, sc_send.speedCamera.speedCameraDetected, \
-                ConcentricLayer1Item.Latitude, ConcentricLayer1Item.Longitude, \
-                ConcentricLayer1Item.Direct, ConcentricLayer1Item.SpeedLimit, \
-                ConcentricLayer1Item.RoadType, ConcentricLayer1Item.Distance, \
-                ConcentricLayer1Item.Angle, Item)
+        #print("SpeedCamItem=", self.VehicleTrackIndex, VehicleLatitude, VehicleLongitude, VehicleSpeed, \
+        #        sc_send.speedCamera.vehicleDirect, sc_send.speedCamera.speedCameraDetected, \
+        #        ConcentricLayer1Item.Latitude, ConcentricLayer1Item.Longitude, \
+        #        ConcentricLayer1Item.Direct, ConcentricLayer1Item.SpeedLimit, \
+        #        ConcentricLayer1Item.RoadType, ConcentricLayer1Item.Distance, \
+        #        ConcentricLayer1Item.Angle, Item)
 
         sc_send.speedCamera.speedCameraMapPosition.latitude = float(ConcentricLayer1Item.Latitude)
         sc_send.speedCamera.speedCameraMapPosition.longitude = float(ConcentricLayer1Item.Longitude)

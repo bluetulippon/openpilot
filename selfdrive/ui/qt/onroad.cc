@@ -71,9 +71,22 @@ OnroadAlerts::OnroadAlerts(QWidget *parent) : QWidget(parent) {
     auto path = QUrl::fromLocalFile(kv.second.first);
     sounds[kv.first].setSource(path);
   }
+
+  speedCam = new SpeedCam(this);
 }
 
 void OnroadAlerts::updateState(const UIState &s) {
+#if 1
+  T_SpeedCamData_S *speedCamData = speedCam->updateState(s);
+  LOGE("[PONTEST][onroad.cc][OnroadAlerts::updateState() speedCamData->previousSpeedCameraDetected=%d]", speedCamData->previousSpeedCameraDetected);
+  LOGE("[PONTEST][onroad.cc][OnroadAlerts::updateState() speedCamData->speedCameraDetected=%d]", speedCamData->speedCameraDetected);
+  if(speedCamData->isUpdated && speedCamData->speedCameraDetected) {
+    if(!speedCamData->previousSpeedCameraDetected) {
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] speedCamData->speedLimit=%d", speedCamData->speedLimit);
+      playSpeedLimitSound(speedCamData->speedLimit);
+    }
+  }
+#endif
   SubMaster &sm = *(s.sm);
   if (sm.updated("carState")) {
     // scale volume with speed
@@ -129,6 +142,53 @@ void OnroadAlerts::updateAlert(const QString &t1, const QString &t2, float blink
   blinking_rate = blink_rate;
 
   update();
+}
+
+void OnroadAlerts::playSpeedLimitSound(T_SpeedLimit_E speedLimit) {
+  LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] speedLimit=%d", speedLimit);
+  stopSounds();
+  switch(speedLimit) {
+    case SPEED_LIMIT_20_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT20_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 20 KM");
+      break;
+    case SPEED_LIMIT_30_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT30_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 30 KM");
+      break;
+    case SPEED_LIMIT_40_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT40_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 40 KM");
+      break;
+    case SPEED_LIMIT_50_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT50_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 50 KM");
+      break;
+    case SPEED_LIMIT_60_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT60_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 60 KM");
+      break;
+    case SPEED_LIMIT_70_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT70_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 70 KM");
+      break;
+    case SPEED_LIMIT_80_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT80_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 80 KM");
+      break;
+    case SPEED_LIMIT_90_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT90_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 90 KM");
+      break;
+    case SPEED_LIMIT_100_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT100_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 100 KM");
+      break;
+    case SPEED_LIMIT_110_KM:
+      //playSound(AudibleAlert::CHIME_SPEED_LIMIT110_KM);
+      LOGE("[PONTEST][onroad.cc][OnroadAlerts::playSpeedLimitSound()] 110 KM");
+      break;
+  }
 }
 
 void OnroadAlerts::playSound(AudibleAlert alert) {

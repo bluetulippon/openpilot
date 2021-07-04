@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+//#include <speed_cam>
 
 #include <QSoundEffect>
 #include <QtWidgets>
@@ -9,6 +10,7 @@
 #include "selfdrive/hardware/hw.h"
 #include "selfdrive/ui/ui.h"
 #include "selfdrive/ui/qt/qt_window.h"
+#include "selfdrive/ui/qt/speed_cam.h"
 
 typedef cereal::CarControl::HUDControl::AudibleAlert AudibleAlert;
 
@@ -19,6 +21,7 @@ class OnroadAlerts : public QWidget {
 
 public:
   OnroadAlerts(QWidget *parent = 0);
+  SpeedCam *speedCam;
 
 protected:
   void paintEvent(QPaintEvent*) override;
@@ -26,6 +29,7 @@ protected:
 private:
   void stopSounds();
   void playSound(AudibleAlert alert);
+  void playSpeedLimitSound(T_SpeedLimit_E speedLimit);
   void updateAlert(const QString &t1, const QString &t2, float blink_rate,
                    const std::string &type, cereal::ControlsState::AlertSize size, AudibleAlert sound);
 
@@ -58,6 +62,7 @@ private:
   QString text1, text2;
   std::string alert_type;
   cereal::ControlsState::AlertSize alert_size;
+
 
 public slots:
   void updateState(const UIState &s);
