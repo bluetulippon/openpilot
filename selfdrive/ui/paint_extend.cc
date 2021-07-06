@@ -265,7 +265,7 @@ void ui_draw_infobar(UIState *s) {
   }
 }
 
-#define BLINKING_RATE 96
+#define BLINKING_RATE 90
 static int blinking_rate = BLINKING_RATE;
 void ui_draw_blinker(UIState *s) {
   const int viz_blinker_w = 280;
@@ -332,6 +332,7 @@ void ui_draw_blindspot(UIState *s) {
   }
 }
 
+#if 0
 static bool PreviousSpeedCameraDetected = false;
 void ui_draw_speedcamera(UIState *s) {
   char speedLimit[16];
@@ -409,6 +410,7 @@ void ui_draw_speedcamera(UIState *s) {
   }
 #endif
 }
+#endif
 
 //===== draw hud =====
 void ui_draw_hud(UIState *s) {
@@ -416,7 +418,9 @@ void ui_draw_hud(UIState *s) {
   bool IsVagInfobarEnabled = true;
   bool IsVagBlinkerEnabled = true;
   bool IsVagBlindspotEnabled = true;
+#if 0
   bool IsVagSpeedCameraEnabled = true;
+#endif
   bool IsVagDevelopModeEnabled = true;
   Params params;
 
@@ -424,7 +428,9 @@ void ui_draw_hud(UIState *s) {
   IsVagInfobarEnabled = params.getBool("IsVagInfobarEnabled");
   IsVagBlinkerEnabled = params.getBool("IsVagBlinkerEnabled");
   IsVagBlindspotEnabled = params.getBool("IsVagBlindspotEnabled");
+#if 0
   IsVagSpeedCameraEnabled = params.getBool("IsVagSpeedCameraEnabled");
+#endif
   IsVagDevelopModeEnabled = params.getBool("IsVagDevelopModeEnabled");
 
   if(IsVagInfoboxEnabled) {
@@ -445,7 +451,9 @@ void ui_draw_hud(UIState *s) {
   if(IsVagBlinkerEnabled) {
     ui_draw_blinker(s);
   }
+#if 0
   if(IsVagSpeedCameraEnabled) {
     ui_draw_speedcamera(s);
   }
+#endif
 }
