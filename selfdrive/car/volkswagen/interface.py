@@ -1,6 +1,6 @@
 from cereal import car
 from selfdrive.swaglog import cloudlog
-from selfdrive.car.volkswagen.values import CAR, BUTTON_STATES, TransmissionType, GearShifter
+from selfdrive.car.volkswagen.values import CAR, BUTTON_STATES, TransmissionType, GearShifter, NetworkLocation
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint
 from selfdrive.car.interfaces import CarInterfaceBase
 
@@ -13,6 +13,10 @@ class CarInterface(CarInterfaceBase):
 
     self.displayMetricUnitsPrev = None
     self.buttonStatesPrev = BUTTON_STATES.copy()
+
+    #Pon Autodetect J533 or comma camera can
+    # Alias Extended CAN parser to PT/CAM parser, based on detected network location
+    self.cp_ext = self.cp if CP.networkLocation == NetworkLocation.fwdCamera else self.cp_cam
 
   @staticmethod
   def compute_gb(accel, speed):
@@ -43,6 +47,14 @@ class CarInterface(CarInterfaceBase):
         ret.transmissionType = TransmissionType.manual
       cloudlog.info("Detected transmission type: %s", ret.transmissionType)
 
+      #Pon Autodetect J533 or comma camera can
+      #ESP_21 present on bus 1, we're hooked up at the CAN gateway
+      if 0xfd in fingerprint[1]:
+        ret.networkLocation = NetworkLocation.gateway
+      else:  # We're hooked up at the LKAS camera
+        ret.networkLocation = NetworkLocation.fwdCamera
+      cloudlog.info("Detected network location: %s", ret.networkLocation)
+
     # Global tuning defaults, can be overridden per-vehicle
 
     ret.steerRateCost = 1.0
@@ -57,7 +69,12 @@ class CarInterface(CarInterfaceBase):
 
     # Per-chassis tuning values, override tuning defaults here if desired
 
-    if candidate == CAR.GOLF_MK7:
+    if candidate == CAR.ATLAS_MK1:
+      # Averages of all CA Atlas variants
+      ret.mass = 2011 + STD_CARGO_KG
+      ret.wheelbase = 2.98
+
+    elif candidate == CAR.GOLF_MK7:
       # Averages of all AU Golf variants
       ret.mass = 1397 + STD_CARGO_KG
       ret.wheelbase = 2.62
@@ -77,10 +94,10 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1715 + STD_CARGO_KG
       ret.wheelbase = 2.74
 
-    elif candidate == CAR.AUDI_A3:
-      # Temporarily carry forward old tuning values while we test vehicle identification
-      ret.mass = 1500 + STD_CARGO_KG
-      ret.wheelbase = 2.64
+    elif candidate == CAR.AUDI_A3_MK3:
+      # Averages of all 8V A3 variants
+      ret.mass = 1335 + STD_CARGO_KG
+      ret.wheelbase = 2.61
 
     elif candidate == CAR.SEAT_ATECA_MK1:
       # Averages of all 5F Ateca variants
@@ -101,6 +118,11 @@ class CarInterface(CarInterfaceBase):
       # Averages of all 3V/NP Scala variants
       ret.mass = 1505 + STD_CARGO_KG
       ret.wheelbase = 2.84
+
+    elif candidate == CAR.SKODA_OCTAVIA_MK3:
+      # Averages of all 5E/NE Octavia variants
+      ret.mass = 1388 + STD_CARGO_KG
+      ret.wheelbase = 2.68
 
     ret.centerToFront = ret.wheelbase * 0.45
 
@@ -127,7 +149,7 @@ class CarInterface(CarInterfaceBase):
     self.cp.update_strings(can_strings)
     self.cp_cam.update_strings(can_strings)
 
-    ret = self.CS.update(self.cp, self.CP.transmissionType)
+    ret = self.CS.update(self.cp, self.cp_cam, self.cp_ext, self.CP.transmissionType)
     ret.canValid = self.cp.can_valid and self.cp_cam.can_valid
     ret.steeringRateLimited = self.CC.steer_rate_limited if self.CC is not None else False
 
@@ -164,8 +186,9 @@ class CarInterface(CarInterfaceBase):
     self.CS.out = ret.as_reader()
     return self.CS.out
 
+  #Pon Fulltime lka
   def apply(self, c):
-    can_sends = self.CC.update(c.enabled, self.CS, self.frame, c.actuators,
+    can_sends = self.CC.update(c.enabled, c.availableFulltimeLka, self.CS, self.frame, c.actuators,
                    c.hudControl.visualAlert,
                    c.hudControl.audibleAlert,
                    c.hudControl.leftLaneVisible,

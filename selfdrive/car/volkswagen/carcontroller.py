@@ -1,7 +1,8 @@
 from cereal import car
+from common.params import Params, put_nonblocking
 from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.volkswagen import volkswagencan
-from selfdrive.car.volkswagen.values import DBC, CANBUS, MQB_LDW_MESSAGES, BUTTON_STATES, CarControllerParams
+from selfdrive.car.volkswagen.values import DBC, CANBUS, MQB_LDW_MESSAGES, BUTTON_STATES, CarControllerParams, NetworkLocation
 from opendbc.can.packer import CANPacker
 
 
@@ -18,9 +19,16 @@ class CarController():
     self.graMsgStartFramePrev = 0
     self.graMsgBusCounterPrev = 0
 
+    #Pon Autodetect J533 or comma camera can
+    if CP.networkLocation == NetworkLocation.fwdCamera:
+      self.ext_can = CANBUS.pt
+    else:
+      self.ext_can = CANBUS.cam
+
     self.steer_rate_limited = False
 
-  def update(self, enabled, CS, frame, actuators, visual_alert, audible_alert, leftLaneVisible, rightLaneVisible):
+  #Pon Fulltime lka
+  def update(self, enabled, availableFulltimeLka, CS, frame, actuators, visual_alert, audible_alert, leftLaneVisible, rightLaneVisible):
     """ Controls thread """
 
     P = CarControllerParams
@@ -43,7 +51,9 @@ class CarController():
 
       # FAULT AVOIDANCE: HCA must not be enabled at standstill. Also stop
       # commanding HCA if there's a fault, so the steering rack recovers.
-      if enabled and not (CS.out.standstill or CS.steeringFault):
+      #Pon Fulltime lka (add condition acc available trigger lka)
+      #if enabled and not (CS.out.standstill or CS.steeringFault):
+      if (enabled or availableFulltimeLka) and not (CS.out.standstill or CS.steeringFault):
 
         # FAULT AVOIDANCE: Requested HCA torque must not exceed 3.0 Nm. This
         # is inherently handled by scaling to STEER_MAX. The rack doesn't seem
@@ -110,7 +120,9 @@ class CarController():
     # filters LDW_02 from the factory camera and OP emits LDW_02 at 10Hz.
 
     if frame % P.LDW_STEP == 0:
-      hcaEnabled = True if enabled and not CS.out.standstill else False
+      #Pon Fulltime lka (add condition acc available trigger lka)
+      #hcaEnabled = True if enabled and not CS.out.standstill else False
+      hcaEnabled = True if (enabled or availableFulltimeLka) and not CS.out.standstill else False
 
       if visual_alert == car.CarControl.HUDControl.VisualAlert.steerRequired:
         hud_alert = MQB_LDW_MESSAGES["laneAssistTakeOverSilent"]
@@ -119,7 +131,9 @@ class CarController():
 
       can_sends.append(volkswagencan.create_mqb_hud_control(self.packer_pt, CANBUS.pt, hcaEnabled,
                                                             CS.out.steeringPressed, hud_alert, leftLaneVisible,
-                                                            rightLaneVisible))
+                                                            rightLaneVisible, CS.ldw_lane_warning_left,
+                                                            CS.ldw_lane_warning_right, CS.ldw_side_dlc_tlc,
+                                                            CS.ldw_dlc, CS.ldw_tlc))
 
     #--------------------------------------------------------------------------
     #                                                                         #
@@ -176,7 +190,7 @@ class CarController():
         if self.graMsgSentCount == 0:
           self.graMsgStartFramePrev = frame
         idx = (CS.graMsgBusCounter + 1) % 16
-        can_sends.append(volkswagencan.create_mqb_acc_buttons_control(self.packer_pt, CANBUS.pt, self.graButtonStatesToSend, CS, idx))
+        can_sends.append(volkswagencan.create_mqb_acc_buttons_control(self.packer_pt, self.ext_can, self.graButtonStatesToSend, CS, idx))
         self.graMsgSentCount += 1
         if self.graMsgSentCount >= P.GRA_VBP_COUNT:
           self.graButtonStatesToSend = None
