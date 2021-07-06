@@ -51,8 +51,7 @@ class CarController():
       # FAULT AVOIDANCE: HCA must not be enabled at standstill. Also stop
       # commanding HCA if there's a fault, so the steering rack recovers.
       #Pon Fulltime LKA (add condition acc available trigger LKA)
-      #if (enabled or availableFulltimeLka) and not (CS.out.standstill or CS.out.steerError or CS.out.steerWarning):
-      if (enabled or availableFulltimeLka) and not (CS.out.standstill):
+      if (enabled or availableFulltimeLka) and not (CS.out.standstill or CS.out.steerError or CS.out.steerWarning):
         # FAULT AVOIDANCE: Requested HCA torque must not exceed 3.0 Nm. This
         # is inherently handled by scaling to STEER_MAX. The rack doesn't seem
         # to care about up/down rate, but we have some evidence it may do its
