@@ -238,6 +238,9 @@ static void update_sockets(UIState *s) {
   }
 #endif
 #if 1 //PONTEST Develop SACC
+  if (sm.updated("carControl")) {
+    scene.car_control = sm["carControl"].getCarControl();
+  }
   if (sm.updated("speedCamera")) {
     scene.speed_camera = sm["speedCamera"].getSpeedCamera();
   }
