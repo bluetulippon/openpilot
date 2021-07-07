@@ -92,6 +92,11 @@ QWidget * vag_panel() {
                                             "Speed camera limitation warnning",
                                             ""
                                             ));
+  vag_list->addWidget(new ParamControl("IsVagSpeedLimitSoundEnabled",
+                                            " Enable Speed Limit Sound",
+                                            "Enable speed litmit sound warning",
+                                            ""
+                                            ));
 #if 0
   vag_list->addWidget(new ParamControl("IsVagSaccEnabled",
                                             " Enable SACC (Useless for develop debuging)",

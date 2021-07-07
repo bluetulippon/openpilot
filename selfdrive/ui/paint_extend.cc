@@ -353,6 +353,11 @@ void ui_draw_speedcamera(UIState *s) {
 #if DEVELOP_SACC //PONTEST
   char speedLimit[16];
   char distance[16];
+  bool IsVagSpeedLimitSoundEnabled;
+  cereal::CarControl::HUDControl::AudibleAlert audibleAlert;
+  
+  read_param(&IsVagSpeedLimitSoundEnabled, "IsVagSpeedLimitSoundEnabled");
+
 
 #if 0 //Draw debug text on ui
   char value[64];
@@ -379,24 +384,34 @@ void ui_draw_speedcamera(UIState *s) {
 
   if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 25.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_25");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT20_KM;
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 30.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_30");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT30_KM;
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 40.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_40");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT40_KM;
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 50.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_50");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT50_KM;
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 60.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_60");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT60_KM;
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 70.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_70");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT70_KM;
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 80.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_80");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT80_KM;
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 90.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_90");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT90_KM;
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 100.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_100");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT100_KM;
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getSpeedLimitation() == 110.0) {
     snprintf(speedLimit, sizeof(speedLimit), "speed_limit_110");
+    audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT110_KM;
   }
 
   if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.2) {
@@ -415,7 +430,9 @@ void ui_draw_speedcamera(UIState *s) {
     ui_draw_speed_image(s, 1650, 500, 200, 200, speedLimit);
     ui_draw_hud_text(s, 1700, 700, distance, 64, COLOR_YELLOW);
     if(PreviousSpeedCameraDetected == false) {
-      s->sound->play(cereal::CarControl::HUDControl::AudibleAlert(4));
+      if(IsVagSpeedLimitSoundEnabled) {
+        s->sound->play(cereal::CarControl::HUDControl::AudibleAlert(audibleAlert));
+      }
     }
   }
   PreviousSpeedCameraDetected = s->scene.speed_camera.getSpeedCameraDetected();

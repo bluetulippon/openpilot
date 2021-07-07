@@ -93,6 +93,7 @@ keys = {
   b"IsVagFulltimeLkaDisableWithBlinker": [TxType.PERSISTENT],
   b"IsVagFulltimeLkaDisableWithBrake": [TxType.PERSISTENT],
   b"IsVagSpeedCameraEnabled": [TxType.PERSISTENT],
+  b"IsVagSpeedLimitSoundEnabled": [TxType.PERSISTENT],
   b"IsVagSaccEnabled": [TxType.PERSISTENT],
   b"IsVagDevelopModeEnabled": [TxType.PERSISTENT],
 }
