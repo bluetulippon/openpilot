@@ -1,15 +1,20 @@
 [submodule "panda"]
 	path = panda
-	url = ../../commaai/panda.git
+	url = ../../bluetulippon/panda.git
+	branch = v0.8.3_20210329_2354_develop
 [submodule "opendbc"]
 	path = opendbc
-	url = ../../commaai/opendbc.git
+	url = ../../bluetulippon/opendbc.git
+	branch = v0.8.3_20210329_2354_develop
 [submodule "laika_repo"]
 	path = laika_repo
-	url = ../../commaai/laika.git
+	url = ../../bluetulippon/laika.git
+	branch = v0.8.3_20210329_2354_develop
 [submodule "cereal"]
 	path = cereal
-	url = ../../commaai/cereal.git
+	url = ../../bluetulippon/cereal.git
+	branch = v0.8.3_20210329_2354_develop
 [submodule "rednose_repo"]
 	path = rednose_repo
-	url = ../../commaai/rednose.git
+	url = ../../bluetulippon/rednose.git
+	branch = v0.8.3_20210329_2354_develop
