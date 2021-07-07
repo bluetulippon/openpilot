@@ -418,15 +418,15 @@ void ui_draw_speedcamera(UIState *s) {
     audibleAlert = cereal::CarControl::HUDControl::AudibleAlert::CHIME_SPEED_LIMIT110_KM;
   }
 
-  if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.2) {
+  if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.1) {
     snprintf(distance, sizeof(distance), "100M");
-  } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.3) {
+  } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.2) {
     snprintf(distance, sizeof(distance), "200M");
-  } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.4) {
+  } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.3) {
     snprintf(distance, sizeof(distance), "300M");
-  } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.5) {
+  } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.4) {
     snprintf(distance, sizeof(distance), "400M");
-  } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.6) {
+  } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.5) {
     snprintf(distance, sizeof(distance), "500M");
   }
 
