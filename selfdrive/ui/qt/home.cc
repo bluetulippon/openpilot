@@ -18,6 +18,7 @@
 
 #include "home.hpp"
 #include "paint.hpp"
+#include "paint_extend.hpp"
 #include "qt_window.hpp"
 #include "widgets/drive_stats.hpp"
 #include "widgets/setup.hpp"
@@ -68,6 +69,25 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
   }
 }
 
+//Pon Realtime refresh settings
+void OffroadHome::refreshScreen() {
+  bool IsVagDevelopModeEnabled;
+  read_param(&IsVagDevelopModeEnabled, "IsVagDevelopModeEnabled");
+
+  if(IsVagDevelopModeEnabled) {
+    date->hide();
+    version->hide();
+    drive->hide();
+    setup->hide();
+    statsAndSetupWidget->hide();
+  } else {
+    date->show();
+    version->show();
+    drive->show();
+    setup->show();
+    statsAndSetupWidget->show();
+  }
+}
 
 // OffroadHome: the offroad home page
 
@@ -88,7 +108,7 @@ OffroadHome::OffroadHome(QWidget* parent) : QWidget(parent) {
   header_layout->addWidget(alert_notification, 0, Qt::AlignHCenter | Qt::AlignRight);
 
   std::string brand = Params().read_db_bool("Passive") ? "dashcam" : "openpilot";
-  QLabel* version = new QLabel(QString::fromStdString(brand + " v" + Params().get("Version")));
+  version = new QLabel(QString::fromStdString(brand + " v" + Params().get("Version")));
   version->setStyleSheet(R"(font-size: 55px;)");
   header_layout->addWidget(version, 0, Qt::AlignHCenter | Qt::AlignRight);
 
@@ -100,15 +120,15 @@ OffroadHome::OffroadHome(QWidget* parent) : QWidget(parent) {
 
   QHBoxLayout* statsAndSetup = new QHBoxLayout();
 
-  DriveStats* drive = new DriveStats;
+  drive = new DriveStats;
   drive->setFixedSize(800, 800);
   statsAndSetup->addWidget(drive);
 
-  SetupWidget* setup = new SetupWidget;
+  setup = new SetupWidget;
   //setup->setFixedSize(700, 700);
   statsAndSetup->addWidget(setup);
 
-  QWidget* statsAndSetupWidget = new QWidget();
+  statsAndSetupWidget = new QWidget();
   statsAndSetupWidget->setLayout(statsAndSetup);
 
   center_layout->addWidget(statsAndSetupWidget);

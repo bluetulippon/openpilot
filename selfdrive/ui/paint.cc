@@ -9,6 +9,7 @@
 #include "nanovg_gl.h"
 #include "nanovg_gl_utils.h"
 #include "paint.hpp"
+#include "paint_extend.hpp"
 #include "sidebar.hpp"
 
 // TODO: this is also hardcoded in common/transformations/camera.py
@@ -283,6 +284,8 @@ static void ui_draw_vision_header(UIState *s) {
   ui_draw_vision_maxspeed(s);
   ui_draw_vision_speed(s);
   ui_draw_vision_event(s);
+  //Pon 20210407 Add HUD UI
+  ui_draw_hud(s);
 }
 
 static void ui_draw_vision_footer(UIState *s) {
@@ -398,6 +401,13 @@ void ui_draw(UIState *s) {
   }
   nvgEndFrame(s->vg);
   glDisable(GL_BLEND);
+
+  //Pon Hook setting - IsVagDevelopModeEnabled
+  bool IsVagDevelopModeEnabled;
+  read_param(&IsVagDevelopModeEnabled, "IsVagDevelopModeEnabled");
+  if(IsVagDevelopModeEnabled) {
+    ui_draw_hud(s);
+  }
 }
 
 void ui_draw_image(const UIState *s, const Rect &r, const char *name, float alpha) {
@@ -529,6 +539,16 @@ void ui_nvg_init(UIState *s) {
       {"network_3", "../assets/images/network_3.png"},
       {"network_4", "../assets/images/network_4.png"},
       {"network_5", "../assets/images/network_5.png"},
+      {"speed_limit_25", "../assets/images/img_speed_limit_25.png"},
+      {"speed_limit_30", "../assets/images/img_speed_limit_30.png"},
+      {"speed_limit_40", "../assets/images/img_speed_limit_40.png"},
+      {"speed_limit_50", "../assets/images/img_speed_limit_50.png"},
+      {"speed_limit_60", "../assets/images/img_speed_limit_60.png"},
+      {"speed_limit_70", "../assets/images/img_speed_limit_70.png"},
+      {"speed_limit_80", "../assets/images/img_speed_limit_80.png"},
+      {"speed_limit_90", "../assets/images/img_speed_limit_90.png"},
+      {"speed_limit_100", "../assets/images/img_speed_limit_100.png"},
+      {"speed_limit_110", "../assets/images/img_speed_limit_110.png"},
   };
   for (auto [name, file] : images) {
     s->images[name] = nvgCreateImage(s->vg, file, 1);
