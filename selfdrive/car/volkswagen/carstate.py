@@ -119,6 +119,7 @@ class CarState(CarStateBase):
     # Update ACC setpoint. When the setpoint is zero or there's an error, the
     # radar sends a set-speed of ~90.69 m/s / 203mph.
     ret.cruiseState.speed = ext_cp.vl["ACC_02"]['ACC_Wunschgeschw'] * CV.KPH_TO_MS
+    print("[PONTEST][carstate.py][update()] ret.cruiseState.speed=", ret.cruiseState.speed)
     if ret.cruiseState.speed > 90:
       ret.cruiseState.speed = 0
 
@@ -131,6 +132,12 @@ class CarState(CarStateBase):
     self.buttonStates["gapAdjustCruise"] = bool(pt_cp.vl["GRA_ACC_01"]['GRA_Verstellung_Zeitluecke'])
     ret.leftBlinker = bool(pt_cp.vl["Gateway_72"]['BH_Blinker_li'])
     ret.rightBlinker = bool(pt_cp.vl["Gateway_72"]['BH_Blinker_re'])
+    print("[PONTEST][carstate.py][update()] self.buttonStates[accelCruise]=", self.buttonStates["accelCruise"])
+    print("[PONTEST][carstate.py][update()] self.buttonStates[decelCruise]=", self.buttonStates["decelCruise"])
+    print("[PONTEST][carstate.py][update()] self.buttonStates[cancel]=", self.buttonStates["cancel"])
+    print("[PONTEST][carstate.py][update()] self.buttonStates[setCruise]=", self.buttonStates["setCruise"])
+    print("[PONTEST][carstate.py][update()] self.buttonStates[resumeCruise]=", self.buttonStates["resumeCruise"])
+    print("[PONTEST][carstate.py][update()] self.buttonStates[gapAdjustCruise]=", self.buttonStates["gapAdjustCruise"])
 
     # Read ACC hardware button type configuration info that has to pass thru
     # to the radar. Ends up being different for steering wheel buttons vs
@@ -142,6 +149,10 @@ class CarState(CarStateBase):
     # Pick up the GRA_ACC_01 CAN message counter so we can sync to it for
     # later cruise-control button spamming.
     self.graMsgBusCounter = pt_cp.vl["GRA_ACC_01"]['COUNTER']
+    print("[PONTEST][carstate.py][update()] self.graHauptschalter=", self.graHauptschalter)
+    print("[PONTEST][carstate.py][update()] self.graTypHauptschalter=", self.graTypHauptschalter)
+    print("[PONTEST][carstate.py][update()] self.graButtonTypeInfo=", self.graButtonTypeInfo)
+    print("[PONTEST][carstate.py][update()] self.graTipStufe2=", self.graTipStufe2)
 
     # Check to make sure the electric power steering rack is configured to
     # accept and respond to HCA_01 messages and has not encountered a fault.

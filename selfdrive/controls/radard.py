@@ -200,9 +200,11 @@ def radard_thread(sm=None, pm=None, can_sock=None):
   # Pon Hook vag settings for Lead Car
   params = Params()
   is_vag_lead_car_enabled = True if (params.get("IsVagFulltimeLkaEnabled", encoding='utf8') == "1") else False
+  print("[PONTEST][radard.py][radard_thread()] is_vag_lead_car_enabled=", is_vag_lead_car_enabled)
 
   # TODO: always log leads once we can hide them conditionally
   enable_lead = CP.openpilotLongitudinalControl or not CP.radarOffCan or is_vag_lead_car_enabled
+  print("[PONTEST][radard.py][radard_thread()] enable_lead=", enable_lead)
 
   while 1:
     can_strings = messaging.drain_sock_raw(can_sock, wait_for_one=True)
