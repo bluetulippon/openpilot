@@ -162,6 +162,43 @@ class CarState(CarStateBase):
     self.parkingBrakeSet = bool(pt_cp.vl["Kombi_01"]['KBI_Handbremse'])  # FIXME: need to include an EPB check as well
     ret.espDisabled = pt_cp.vl["ESP_21"]['ESP_Tastung_passiv'] != 0
 
+
+    #PONTEST
+    print("[PONTEST][carstate.py][update()] ACC_Texte_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Texte_Zusatzanz'])
+    print("[PONTEST][carstate.py][update()] ACC_Status_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Status_Zusatzanz'])
+    print("[PONTEST][carstate.py][update()] ACC_Texte=", ext_cp.vl["ACC_04"]['ACC_Texte'])
+    print("[PONTEST][carstate.py][update()] ACC_Texte_braking_guard=", ext_cp.vl["ACC_04"]['ACC_Texte_braking_guard'])
+    print("[PONTEST][carstate.py][update()] ACC_Warnhinweis=", ext_cp.vl["ACC_04"]['ACC_Warnhinweis'])
+    print("[PONTEST][carstate.py][update()] ACC_Geschw_Zielfahrzeug=", ext_cp.vl["ACC_04"]['ACC_Geschw_Zielfahrzeug'])
+    print("[PONTEST][carstate.py][update()] ACC_Charisma_FahrPr=", ext_cp.vl["ACC_04"]['ACC_Charisma_FahrPr'])
+    print("[PONTEST][carstate.py][update()] ACC_Charisma_Status=", ext_cp.vl["ACC_04"]['ACC_Charisma_Status'])
+    print("[PONTEST][carstate.py][update()] ACC_Charisma_Umschaltung=", ext_cp.vl["ACC_04"]['ACC_Charisma_Umschaltung'])
+    print("[PONTEST][carstate.py][update()] ACC_limitierte_Anfahrdyn=", ext_cp.vl["ACC_06"]['ACC_limitierte_Anfahrdyn'])
+    print("[PONTEST][carstate.py][update()] ACC_zul_Regelabw_unten=", ext_cp.vl["ACC_06"]['ACC_zul_Regelabw_unten'])
+    print("[PONTEST][carstate.py][update()] ACC_StartStopp_Info=", ext_cp.vl["ACC_06"]['ACC_StartStopp_Info'])
+    print("[PONTEST][carstate.py][update()] ACC_Sollbeschleunigung_02=", ext_cp.vl["ACC_06"]['ACC_Sollbeschleunigung_02'])
+    print("[PONTEST][carstate.py][update()] ACC_zul_Regelabw_oben=", ext_cp.vl["ACC_06"]['ACC_zul_Regelabw_oben'])
+    print("[PONTEST][carstate.py][update()] ACC_neg_Sollbeschl_Grad_02=", ext_cp.vl["ACC_06"]['ACC_neg_Sollbeschl_Grad_02'])
+    print("[PONTEST][carstate.py][update()] ACC_pos_Sollbeschl_Grad_02=", ext_cp.vl["ACC_06"]['ACC_pos_Sollbeschl_Grad_02'])
+    print("[PONTEST][carstate.py][update()] ACC_Anfahren=", ext_cp.vl["ACC_06"]['ACC_Anfahren'])
+    print("[PONTEST][carstate.py][update()] ACC_Anhalten=", ext_cp.vl["ACC_06"]['ACC_Anhalten'])
+    print("[PONTEST][carstate.py][update()] ACC_Typ=", ext_cp.vl["ACC_06"]['ACC_Typ'])
+    print("[PONTEST][carstate.py][update()] ACC_Status_ACC=", ext_cp.vl["ACC_06"]['ACC_Status_ACC'])
+    print("[PONTEST][carstate.py][update()] ACC_Minimale_Bremsung=", ext_cp.vl["ACC_06"]['ACC_Minimale_Bremsung'])
+    print("[PONTEST][carstate.py][update()] ACC_Status_Prim_Anz=", ext_cp.vl["ACC_02"]['ACC_Status_Prim_Anz'])
+    print("[PONTEST][carstate.py][update()] ACC_Abstandsindex=", ext_cp.vl["ACC_02"]['ACC_Abstandsindex'])
+    print("[PONTEST][carstate.py][update()] ACC_Akustik=", ext_cp.vl["ACC_02"]['ACC_Akustik'])
+    print("[PONTEST][carstate.py][update()] ACC_Gesetzte_Zeitluecke=", ext_cp.vl["ACC_02"]['ACC_Gesetzte_Zeitluecke'])
+    print("[PONTEST][carstate.py][update()] ACC_Optischer_Fahrerhinweis=", ext_cp.vl["ACC_02"]['ACC_Optischer_Fahrerhinweis'])
+    print("[PONTEST][carstate.py][update()] ACC_Typ_Tachokranz=", ext_cp.vl["ACC_02"]['ACC_Typ_Tachokranz'])
+    print("[PONTEST][carstate.py][update()] ACC_Anzeige_Zeitluecke=", ext_cp.vl["ACC_02"]['ACC_Anzeige_Zeitluecke'])
+    print("[PONTEST][carstate.py][update()] ACC_Tachokranz=", ext_cp.vl["ACC_02"]['ACC_Tachokranz'])
+    print("[PONTEST][carstate.py][update()] ACC_Display_Prio=", ext_cp.vl["ACC_02"]['ACC_Display_Prio'])
+    print("[PONTEST][carstate.py][update()] ACC_Relevantes_Objekt=", ext_cp.vl["ACC_02"]['ACC_Relevantes_Objekt'])
+    print("[PONTEST][carstate.py][update()] ACC_Texte_Primaeranz=", ext_cp.vl["ACC_02"]['ACC_Texte_Primaeranz'])
+    print("[PONTEST][carstate.py][update()] ACC_Wunschgeschw_erreicht=", ext_cp.vl["ACC_02"]['ACC_Wunschgeschw_erreicht'])
+    print("[PONTEST][carstate.py][update()] ACC_Status_Anzeige=", ext_cp.vl["ACC_02"]['ACC_Status_Anzeige'])
+
     return ret
 
   @staticmethod
@@ -280,9 +317,46 @@ class MqbExtraSignals:
     ("AWV2_Freigabe", "ACC_10", 0),                 # FCW brake jerk release
     ("ANB_Teilbremsung_Freigabe", "ACC_10", 0),     # AEB partial braking release
     ("ANB_Zielbremsung_Freigabe", "ACC_10", 0),     # AEB target braking release
+    #PONTEST
+    ("ACC_Texte_Zusatzanz", "ACC_04", 0),           # PONTEST
+    ("ACC_Status_Zusatzanz", "ACC_04", 0),          # PONTEST
+    ("ACC_Texte", "ACC_04", 0),                     # PONTEST
+    ("ACC_Texte_braking_guard", "ACC_04", 0),       # PONTEST
+    ("ACC_Warnhinweis", "ACC_04", 0),               # PONTEST
+    ("ACC_Geschw_Zielfahrzeug", "ACC_04", 0),       # PONTEST
+    ("ACC_Charisma_FahrPr", "ACC_04", 0),           # PONTEST
+    ("ACC_Charisma_Status", "ACC_04", 0),           # PONTEST
+    ("ACC_Charisma_Umschaltung", "ACC_04", 0),      # PONTEST
+    ("ACC_limitierte_Anfahrdyn", "ACC_06", 0),      # PONTEST
+    ("ACC_zul_Regelabw_unten", "ACC_06", 0),        # PONTEST
+    ("ACC_StartStopp_Info", "ACC_06", 0),           # PONTEST
+    ("ACC_Sollbeschleunigung_02", "ACC_06", 0),     # PONTEST
+    ("ACC_zul_Regelabw_oben", "ACC_06", 0),         # PONTEST
+    ("ACC_neg_Sollbeschl_Grad_02", "ACC_06", 0),    # PONTEST
+    ("ACC_pos_Sollbeschl_Grad_02", "ACC_06", 0),    # PONTEST
+    ("ACC_Anfahren", "ACC_06", 0),                  # PONTEST
+    ("ACC_Anhalten", "ACC_06", 0),                  # PONTEST
+    ("ACC_Typ", "ACC_06", 0),                       # PONTEST
+    ("ACC_Status_ACC", "ACC_06", 0),                # PONTEST
+    ("ACC_Minimale_Bremsung", "ACC_06", 0),         # PONTEST
+    ("ACC_Status_Prim_Anz", "ACC_02", 0),           # PONTEST
+    ("ACC_Abstandsindex", "ACC_02", 0),             # PONTEST
+    ("ACC_Akustik", "ACC_02", 0),                   # PONTEST
+    ("ACC_Gesetzte_Zeitluecke", "ACC_02", 0),       # PONTEST
+    ("ACC_Optischer_Fahrerhinweis", "ACC_02", 0),   # PONTEST
+    ("ACC_Typ_Tachokranz", "ACC_02", 0),            # PONTEST
+    ("ACC_Anzeige_Zeitluecke", "ACC_02", 0),        # PONTEST
+    ("ACC_Tachokranz", "ACC_02", 0),                # PONTEST
+    ("ACC_Display_Prio", "ACC_02", 0),              # PONTEST
+    ("ACC_Relevantes_Objekt", "ACC_02", 0),         # PONTEST
+    ("ACC_Texte_Primaeranz", "ACC_02", 0),          # PONTEST
+    ("ACC_Wunschgeschw_erreicht", "ACC_02", 0),     # PONTEST
+    ("ACC_Status_Anzeige", "ACC_02", 0),            # PONTEST
   ], [
     ("ACC_10", 50),                                 # From J428 ACC radar control module
     ("ACC_02", 17),                                 # From J428 ACC radar control module
+    ("ACC_06", 50),                                 # PONTEST
+    ("ACC_04", 50),                                 # PONTEST
   ])
   lkas_camera = ([
     ("LDW_SW_Warnung_links", "LDW_02", 0),          # Blind spot in warning mode on left side due to lane departure
