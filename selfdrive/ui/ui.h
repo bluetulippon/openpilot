@@ -28,8 +28,17 @@
 #define COLOR_WHITE nvgRGBA(255, 255, 255, 255)
 #define COLOR_WHITE_ALPHA(x) nvgRGBA(255, 255, 255, x)
 #define COLOR_RED_ALPHA(x) nvgRGBA(201, 34, 49, x)
-#define COLOR_YELLOW nvgRGBA(218, 202, 37, 255)
 #define COLOR_RED nvgRGBA(201, 34, 49, 255)
+#define COLOR_YELLOW nvgRGBA(218, 202, 37, 255)
+#define COLOR_YELLOW_APPHA(x) nvgRGBA(218, 202, 37, x)
+#define COLOR_PURPLE nvgRGBA(255, 0, 255, 255)
+#define COLOR_PURPLE_APPHA(x) nvgRGBA(255, 0, 255, x)
+#define COLOR_ORANGE nvgRGBA(255, 127, 0, 255)
+#define COLOR_ORANGE_APPHA(x) nvgRGBA(255, 127, 0, x)
+#define COLOR_GREEN nvgRGBA(0, 255, 0, 255)
+#define COLOR_GREEN_APPHA(x) nvgRGBA(0, 255, 0, x)
+#define COLOR_BLUE nvgRGBA(0, 0, 255, 255)
+#define COLOR_BLUE_APPHA(x) nvgRGBA(0, 0, 255, x)
 
 // TODO: this is also hardcoded in common/transformations/camera.py
 // TODO: choose based on frame input size

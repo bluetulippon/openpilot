@@ -31,6 +31,16 @@ private:
 
   std::map<AudibleAlert, std::pair<QString, bool>> sound_map {
     // AudibleAlert, (file path, inf loop)
+    {AudibleAlert::CHIME_SPEED_LIMIT20_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
+    {AudibleAlert::CHIME_SPEED_LIMIT30_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
+    {AudibleAlert::CHIME_SPEED_LIMIT40_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
+    {AudibleAlert::CHIME_SPEED_LIMIT50_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
+    {AudibleAlert::CHIME_SPEED_LIMIT60_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
+    {AudibleAlert::CHIME_SPEED_LIMIT70_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
+    {AudibleAlert::CHIME_SPEED_LIMIT80_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
+    {AudibleAlert::CHIME_SPEED_LIMIT90_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
+    {AudibleAlert::CHIME_SPEED_LIMIT100_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
+    {AudibleAlert::CHIME_SPEED_LIMIT110_KM, {"../assets/sounds/SpeedLimit20km.wav", false}},
     {AudibleAlert::CHIME_DISENGAGE, {"../assets/sounds/disengaged.wav", false}},
     {AudibleAlert::CHIME_ENGAGE, {"../assets/sounds/engaged.wav", false}},
     {AudibleAlert::CHIME_WARNING1, {"../assets/sounds/warning_1.wav", false}},

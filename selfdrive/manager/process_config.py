@@ -35,6 +35,7 @@ procs = [
   #Pon Disabe updated, uploader, Add speedcamerad
   #PythonProcess("updated", "selfdrive.updated", enabled=not PC, persistent=True),
   #PythonProcess("uploader", "selfdrive.loggerd.uploader", persistent=True),
+  PythonProcess("speedcamerad", "selfdrive.vag.speedcamerad", persistent=True),
 ]
 
 managed_processes = {p.name: p for p in procs}
