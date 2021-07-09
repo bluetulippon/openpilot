@@ -84,6 +84,7 @@ if arch == "aarch64" or arch == "larch64":
     libpath += [
       "#phonelibs/snpe/larch64",
       "#phonelibs/libyuv/larch64/lib",
+      "#phonelibs/mapbox-gl-native-qt/larch64"
       "/usr/lib/aarch64-linux-gnu"
     ]
     cpppath += [
@@ -96,6 +97,7 @@ if arch == "aarch64" or arch == "larch64":
     libpath += [
       "#phonelibs/snpe/aarch64",
       "#phonelibs/libyuv/lib",
+      "#phonelibs/mapbox-gl-native-qt/aarch64",
       "/system/vendor/lib64"
     ]
     cflags = ["-DQCOM", "-D_USING_LIBCXX", "-mcpu=cortex-a57"]
