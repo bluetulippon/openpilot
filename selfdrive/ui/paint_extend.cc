@@ -428,16 +428,18 @@ void ui_draw_speedcamera(UIState *s) {
     snprintf(distance, sizeof(distance), "400M");
   } else if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.5) {
     snprintf(distance, sizeof(distance), "500M");
+    if(s->scene.speed_camera.getSpeedCameraDetected()) {
+      if(PreviousSpeedCameraDetected == false) {
+        if(IsVagSpeedLimitSoundEnabled) {
+          s->sound->play(cereal::CarControl::HUDControl::AudibleAlert(audibleAlert));
+        }
+      }
+    }
   }
 
   if(s->scene.speed_camera.getSpeedCameraDetected()) {
     ui_draw_speed_image(s, 1650, 500, 200, 200, speedLimit);
     ui_draw_hud_text(s, 1700, 700, distance, 64, COLOR_YELLOW);
-    if(PreviousSpeedCameraDetected == false) {
-      if(IsVagSpeedLimitSoundEnabled) {
-        s->sound->play(cereal::CarControl::HUDControl::AudibleAlert(audibleAlert));
-      }
-    }
   }
   PreviousSpeedCameraDetected = s->scene.speed_camera.getSpeedCameraDetected();
 #endif
