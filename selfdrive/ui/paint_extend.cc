@@ -353,7 +353,7 @@ void ui_draw_blindspot(UIState *s) {
 }
 
 static bool PreviousSpeedCameraDetected = false;
-static bool SpeedLimitWarningSooundPlayed = false;
+static bool SpeedLimitWarningSoundPlayed = false;
 void ui_draw_speedcamera(UIState *s) {
 #if DEVELOP_SACC //PONTEST
   char speedLimit[16];
@@ -433,12 +433,12 @@ void ui_draw_speedcamera(UIState *s) {
 
   if(s->scene.speed_camera.getSpeedCameraDetected()) {
     if(PreviousSpeedCameraDetected == false) {
-      SpeedLimitWarningSooundPlayed = false;
+      SpeedLimitWarningSoundPlayed = false;
     }
     if(s->scene.speed_camera.getSpeedCameraMapPosition().getVehicleDistance() < 0.5) {
       ui_draw_speed_image(s, 1650, 500, 200, 200, speedLimit);
       ui_draw_hud_text(s, 1700, 700, distance, 64, COLOR_YELLOW);
-      if(！SpeedLimitWarningSooundPlayed) {
+      if(!SpeedLimitWarningSoundPlayed) {
         s->sound->play(cereal::CarControl::HUDControl::AudibleAlert(audibleAlert));
       }
     }
