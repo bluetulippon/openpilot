@@ -111,6 +111,12 @@ QWidget * vag_panel() {
                                             "Enable develop mode",
                                             ""
                                             ));
+  vag_list->addWidget(horizontal_line());
+  vag_list->addWidget(new ParamControl("IsVagDevelopLogEnabled",
+                                            "Enable develop log",
+                                            "Enable develop log",
+                                            ""
+                                            ));
 
   vag_list->addWidget(horizontal_line());
   vag_list->addWidget(new ButtonControl("Android Settings", "OPEN", "",

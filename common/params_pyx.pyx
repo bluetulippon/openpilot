@@ -96,6 +96,7 @@ keys = {
   b"IsVagSpeedLimitSoundEnabled": [TxType.PERSISTENT],
   b"IsVagSaccEnabled": [TxType.PERSISTENT],
   b"IsVagDevelopModeEnabled": [TxType.PERSISTENT],
+  b"IsVagDevelopLogEnabled": [TxType.PERSISTENT],
 }
 
 def ensure_bytes(v):
