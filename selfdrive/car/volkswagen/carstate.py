@@ -136,7 +136,7 @@ class CarState(CarStateBase):
     self.buttonStates["gapAdjustCruise"] = bool(pt_cp.vl["GRA_ACC_01"]['GRA_Verstellung_Zeitluecke'])
     ret.leftBlinker = bool(pt_cp.vl["Gateway_72"]['BH_Blinker_li'])
     ret.rightBlinker = bool(pt_cp.vl["Gateway_72"]['BH_Blinker_re'])
-    if IsVagSpeedCameraEnabled == True:
+    if IsVagDevelopLogEnabled == True:
       print("[PONTEST][carstate.py][update()] self.buttonStates[accelCruise]=", self.buttonStates["accelCruise"])
       print("[PONTEST][carstate.py][update()] self.buttonStates[decelCruise]=", self.buttonStates["decelCruise"])
       print("[PONTEST][carstate.py][update()] self.buttonStates[cancel]=", self.buttonStates["cancel"])
@@ -154,7 +154,7 @@ class CarState(CarStateBase):
     # Pick up the GRA_ACC_01 CAN message counter so we can sync to it for
     # later cruise-control button spamming.
     self.graMsgBusCounter = pt_cp.vl["GRA_ACC_01"]['COUNTER']
-    if IsVagSpeedCameraEnabled == True:
+    if IsVagDevelopLogEnabled == True:
       print("[PONTEST][carstate.py][update()] self.graHauptschalter=", self.graHauptschalter)
       print("[PONTEST][carstate.py][update()] self.graTypHauptschalter=", self.graTypHauptschalter)
       print("[PONTEST][carstate.py][update()] self.graButtonTypeInfo=", self.graButtonTypeInfo)
@@ -170,7 +170,7 @@ class CarState(CarStateBase):
 
 
     #PONTEST
-    if IsVagSpeedCameraEnabled == True:
+    if IsVagDevelopLogEnabled == True:
       print("[PONTEST][carstate.py][update()] ACC_Texte_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Texte_Zusatzanz'])
       print("[PONTEST][carstate.py][update()] ACC_Status_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Status_Zusatzanz'])
       #print("[PONTEST][carstate.py][update()] ACC_Texte=", ext_cp.vl["ACC_04"]['ACC_Texte'])
