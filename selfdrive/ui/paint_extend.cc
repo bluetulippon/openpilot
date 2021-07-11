@@ -440,6 +440,7 @@ void ui_draw_speedcamera(UIState *s) {
       ui_draw_hud_text(s, 1700, 700, distance, 64, COLOR_YELLOW);
       if(!SpeedLimitWarningSoundPlayed) {
         s->sound->play(cereal::CarControl::HUDControl::AudibleAlert(audibleAlert));
+        SpeedLimitWarningSoundPlayed = true;
       }
     }
     
