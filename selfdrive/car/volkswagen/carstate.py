@@ -19,7 +19,7 @@ class CarState(CarStateBase):
 
   def update(self, pt_cp, cam_cp, ext_cp, trans_type):
     params = Params()
-    IsVagDevelopLogEnabled = True if (params.get("IsVagDevelopLogEnabled", encoding='utf8') == "1") else False
+    IsVagAccCutInLogEnabled = True if (params.get("IsVagAccCutInLogEnabled", encoding='utf8') == "1") else False
 
     ret = car.CarState.new_message()
     # Update vehicle speed and acceleration from ABS wheel speeds.
@@ -123,7 +123,7 @@ class CarState(CarStateBase):
     # Update ACC setpoint. When the setpoint is zero or there's an error, the
     # radar sends a set-speed of ~90.69 m/s / 203mph.
     ret.cruiseState.speed = ext_cp.vl["ACC_02"]['ACC_Wunschgeschw'] * CV.KPH_TO_MS
-    print("[PONTEST][carstate.py][update()] ret.cruiseState.speed=", ret.cruiseState.speed)
+    print("[PONTEST][ACC cut-in][carstate.py][update()] ret.cruiseState.speed=", ret.cruiseState.speed)
     if ret.cruiseState.speed > 90:
       ret.cruiseState.speed = 0
 
@@ -136,13 +136,13 @@ class CarState(CarStateBase):
     self.buttonStates["gapAdjustCruise"] = bool(pt_cp.vl["GRA_ACC_01"]['GRA_Verstellung_Zeitluecke'])
     ret.leftBlinker = bool(pt_cp.vl["Gateway_72"]['BH_Blinker_li'])
     ret.rightBlinker = bool(pt_cp.vl["Gateway_72"]['BH_Blinker_re'])
-    if IsVagDevelopLogEnabled == True:
-      print("[PONTEST][carstate.py][update()] self.buttonStates[accelCruise]=", self.buttonStates["accelCruise"])
-      print("[PONTEST][carstate.py][update()] self.buttonStates[decelCruise]=", self.buttonStates["decelCruise"])
-      print("[PONTEST][carstate.py][update()] self.buttonStates[cancel]=", self.buttonStates["cancel"])
-      print("[PONTEST][carstate.py][update()] self.buttonStates[setCruise]=", self.buttonStates["setCruise"])
-      print("[PONTEST][carstate.py][update()] self.buttonStates[resumeCruise]=", self.buttonStates["resumeCruise"])
-      print("[PONTEST][carstate.py][update()] self.buttonStates[gapAdjustCruise]=", self.buttonStates["gapAdjustCruise"])
+    if IsVagAccCutInLogEnabled == True:
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.buttonStates[accelCruise]=", self.buttonStates["accelCruise"])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.buttonStates[decelCruise]=", self.buttonStates["decelCruise"])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.buttonStates[cancel]=", self.buttonStates["cancel"])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.buttonStates[setCruise]=", self.buttonStates["setCruise"])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.buttonStates[resumeCruise]=", self.buttonStates["resumeCruise"])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.buttonStates[gapAdjustCruise]=", self.buttonStates["gapAdjustCruise"])
 
     # Read ACC hardware button type configuration info that has to pass thru
     # to the radar. Ends up being different for steering wheel buttons vs
@@ -154,11 +154,11 @@ class CarState(CarStateBase):
     # Pick up the GRA_ACC_01 CAN message counter so we can sync to it for
     # later cruise-control button spamming.
     self.graMsgBusCounter = pt_cp.vl["GRA_ACC_01"]['COUNTER']
-    if IsVagDevelopLogEnabled == True:
-      print("[PONTEST][carstate.py][update()] self.graHauptschalter=", self.graHauptschalter)
-      print("[PONTEST][carstate.py][update()] self.graTypHauptschalter=", self.graTypHauptschalter)
-      print("[PONTEST][carstate.py][update()] self.graButtonTypeInfo=", self.graButtonTypeInfo)
-      print("[PONTEST][carstate.py][update()] self.graTipStufe2=", self.graTipStufe2)
+    if IsVagAccCutInLogEnabled == True:
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.graHauptschalter=", self.graHauptschalter)
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.graTypHauptschalter=", self.graTypHauptschalter)
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.graButtonTypeInfo=", self.graButtonTypeInfo)
+      print("[PONTEST][ACC cut-in][carstate.py][update()] self.graTipStufe2=", self.graTipStufe2)
 
     # Check to make sure the electric power steering rack is configured to
     # accept and respond to HCA_01 messages and has not encountered a fault.
@@ -170,42 +170,43 @@ class CarState(CarStateBase):
 
 
     #PONTEST
-    if IsVagDevelopLogEnabled == True:
-      print("[PONTEST][carstate.py][update()] ACC_Texte_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Texte_Zusatzanz'])
-      print("[PONTEST][carstate.py][update()] ACC_Status_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Status_Zusatzanz'])
-      #print("[PONTEST][carstate.py][update()] ACC_Texte=", ext_cp.vl["ACC_04"]['ACC_Texte'])
-      #print("[PONTEST][carstate.py][update()] ACC_Texte_braking_guard=", ext_cp.vl["ACC_04"]['ACC_Texte_braking_guard'])
-      #print("[PONTEST][carstate.py][update()] ACC_Warnhinweis=", ext_cp.vl["ACC_04"]['ACC_Warnhinweis'])
-      #print("[PONTEST][carstate.py][update()] ACC_Geschw_Zielfahrzeug=", ext_cp.vl["ACC_04"]['ACC_Geschw_Zielfahrzeug'])
-      print("[PONTEST][carstate.py][update()] ACC_Charisma_FahrPr=", ext_cp.vl["ACC_04"]['ACC_Charisma_FahrPr'])
-      #print("[PONTEST][carstate.py][update()] ACC_Charisma_Status=", ext_cp.vl["ACC_04"]['ACC_Charisma_Status'])
-      #print("[PONTEST][carstate.py][update()] ACC_Charisma_Umschaltung=", ext_cp.vl["ACC_04"]['ACC_Charisma_Umschaltung'])
-      #print("[PONTEST][carstate.py][update()] ACC_limitierte_Anfahrdyn=", ext_cp.vl["ACC_06"]['ACC_limitierte_Anfahrdyn'])
-      print("[PONTEST][carstate.py][update()] ACC_zul_Regelabw_unten=", ext_cp.vl["ACC_06"]['ACC_zul_Regelabw_unten'])
-      print("[PONTEST][carstate.py][update()] ACC_StartStopp_Info=", ext_cp.vl["ACC_06"]['ACC_StartStopp_Info'])
-      print("[PONTEST][carstate.py][update()] ACC_Sollbeschleunigung_02=", ext_cp.vl["ACC_06"]['ACC_Sollbeschleunigung_02'])
-      print("[PONTEST][carstate.py][update()] ACC_zul_Regelabw_oben=", ext_cp.vl["ACC_06"]['ACC_zul_Regelabw_oben'])
-      print("[PONTEST][carstate.py][update()] ACC_neg_Sollbeschl_Grad_02=", ext_cp.vl["ACC_06"]['ACC_neg_Sollbeschl_Grad_02'])
-      print("[PONTEST][carstate.py][update()] ACC_pos_Sollbeschl_Grad_02=", ext_cp.vl["ACC_06"]['ACC_pos_Sollbeschl_Grad_02'])
+    if IsVagAccCutInLogEnabled == True:
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Texte_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Texte_Zusatzanz'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Status_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Status_Zusatzanz'])
+      #print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Texte=", ext_cp.vl["ACC_04"]['ACC_Texte'])
+      #print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Texte_braking_guard=", ext_cp.vl["ACC_04"]['ACC_Texte_braking_guard'])
+      #print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Warnhinweis=", ext_cp.vl["ACC_04"]['ACC_Warnhinweis'])
+      #print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Geschw_Zielfahrzeug=", ext_cp.vl["ACC_04"]['ACC_Geschw_Zielfahrzeug'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Charisma_FahrPr=", ext_cp.vl["ACC_04"]['ACC_Charisma_FahrPr'])
+      #print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Charisma_Status=", ext_cp.vl["ACC_04"]['ACC_Charisma_Status'])
+      #print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Charisma_Umschaltung=", ext_cp.vl["ACC_04"]['ACC_Charisma_Umschaltung'])
+      #print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_limitierte_Anfahrdyn=", ext_cp.vl["ACC_06"]['ACC_limitierte_Anfahrdyn'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_zul_Regelabw_unten=", ext_cp.vl["ACC_06"]['ACC_zul_Regelabw_unten'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_StartStopp_Info=", ext_cp.vl["ACC_06"]['ACC_StartStopp_Info'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Sollbeschleunigung_02=", ext_cp.vl["ACC_06"]['ACC_Sollbeschleunigung_02'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_zul_Regelabw_oben=", ext_cp.vl["ACC_06"]['ACC_zul_Regelabw_oben'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_neg_Sollbeschl_Grad_02=", ext_cp.vl["ACC_06"]['ACC_neg_Sollbeschl_Grad_02'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_pos_Sollbeschl_Grad_02=", ext_cp.vl["ACC_06"]['ACC_pos_Sollbeschl_Grad_02'])
       
-      print("[PONTEST][carstate.py][update()] ACC_Anfahren=", ext_cp.vl["ACC_06"]['ACC_Anfahren'])
-      print("[PONTEST][carstate.py][update()] ACC_Anhalten=", ext_cp.vl["ACC_06"]['ACC_Anhalten'])
-      print("[PONTEST][carstate.py][update()] ACC_Typ=", ext_cp.vl["ACC_06"]['ACC_Typ'])
-      print("[PONTEST][carstate.py][update()] ACC_Status_ACC=", ext_cp.vl["ACC_06"]['ACC_Status_ACC'])
-      print("[PONTEST][carstate.py][update()] ACC_Minimale_Bremsung=", ext_cp.vl["ACC_06"]['ACC_Minimale_Bremsung'])
-      print("[PONTEST][carstate.py][update()] ACC_Status_Prim_Anz=", ext_cp.vl["ACC_02"]['ACC_Status_Prim_Anz'])
-      print("[PONTEST][carstate.py][update()] ACC_Abstandsindex=", ext_cp.vl["ACC_02"]['ACC_Abstandsindex'])
-      print("[PONTEST][carstate.py][update()] ACC_Akustik=", ext_cp.vl["ACC_02"]['ACC_Akustik'])
-      print("[PONTEST][carstate.py][update()] ACC_Gesetzte_Zeitluecke=", ext_cp.vl["ACC_02"]['ACC_Gesetzte_Zeitluecke'])
-      print("[PONTEST][carstate.py][update()] ACC_Optischer_Fahrerhinweis=", ext_cp.vl["ACC_02"]['ACC_Optischer_Fahrerhinweis'])
-      print("[PONTEST][carstate.py][update()] ACC_Typ_Tachokranz=", ext_cp.vl["ACC_02"]['ACC_Typ_Tachokranz'])
-      print("[PONTEST][carstate.py][update()] ACC_Anzeige_Zeitluecke=", ext_cp.vl["ACC_02"]['ACC_Anzeige_Zeitluecke'])
-      print("[PONTEST][carstate.py][update()] ACC_Tachokranz=", ext_cp.vl["ACC_02"]['ACC_Tachokranz'])
-      print("[PONTEST][carstate.py][update()] ACC_Display_Prio=", ext_cp.vl["ACC_02"]['ACC_Display_Prio'])
-      print("[PONTEST][carstate.py][update()] ACC_Relevantes_Objekt=", ext_cp.vl["ACC_02"]['ACC_Relevantes_Objekt'])
-      print("[PONTEST][carstate.py][update()] ACC_Texte_Primaeranz=", ext_cp.vl["ACC_02"]['ACC_Texte_Primaeranz'])
-      print("[PONTEST][carstate.py][update()] ACC_Wunschgeschw_erreicht=", ext_cp.vl["ACC_02"]['ACC_Wunschgeschw_erreicht'])
-      print("[PONTEST][carstate.py][update()] ACC_Status_Anzeige=", ext_cp.vl["ACC_02"]['ACC_Status_Anzeige'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Anfahren=", ext_cp.vl["ACC_06"]['ACC_Anfahren'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Anhalten=", ext_cp.vl["ACC_06"]['ACC_Anhalten'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Typ=", ext_cp.vl["ACC_06"]['ACC_Typ'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Status_ACC=", ext_cp.vl["ACC_06"]['ACC_Status_ACC'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Minimale_Bremsung=", ext_cp.vl["ACC_06"]['ACC_Minimale_Bremsung'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Status_Prim_Anz=", ext_cp.vl["ACC_02"]['ACC_Status_Prim_Anz'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Abstandsindex=", ext_cp.vl["ACC_02"]['ACC_Abstandsindex'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Akustik=", ext_cp.vl["ACC_02"]['ACC_Akustik'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Gesetzte_Zeitluecke=", ext_cp.vl["ACC_02"]['ACC_Gesetzte_Zeitluecke'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Optischer_Fahrerhinweis=", ext_cp.vl["ACC_02"]['ACC_Optischer_Fahrerhinweis'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Typ_Tachokranz=", ext_cp.vl["ACC_02"]['ACC_Typ_Tachokranz'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Anzeige_Zeitluecke=", ext_cp.vl["ACC_02"]['ACC_Anzeige_Zeitluecke'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Tachokranz=", ext_cp.vl["ACC_02"]['ACC_Tachokranz'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Display_Prio=", ext_cp.vl["ACC_02"]['ACC_Display_Prio'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Relevantes_Objekt=", ext_cp.vl["ACC_02"]['ACC_Relevantes_Objekt'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Texte_Primaeranz=", ext_cp.vl["ACC_02"]['ACC_Texte_Primaeranz'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Wunschgeschw_erreicht=", ext_cp.vl["ACC_02"]['ACC_Wunschgeschw_erreicht'])
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Status_Anzeige=", ext_cp.vl["ACC_02"]['ACC_Status_Anzeige'])
+      pass
 
     return ret
 

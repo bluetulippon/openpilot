@@ -20,6 +20,46 @@
 #include "selfdrive/hardware/hw.h"
 
 //Pon Settings menu
+QWidget * debug_panel() {
+  QVBoxLayout *debug_list = new QVBoxLayout();
+  debug_list->setSpacing(30);
+
+  debug_list->addWidget(new ParamControl("IsVagDevelopModeEnabled",
+                                            "Enable develop mode",
+                                            "Enable develop mode",
+                                            ""
+                                            ));
+  debug_list->addWidget(horizontal_line());
+  debug_list->addWidget(new ParamControl("IsVagDevelopLogEnabled",
+                                            "Enable develop log",
+                                            "Enable develop log",
+                                            ""
+                                            ));
+  debug_list->addWidget(horizontal_line());
+  debug_list->addWidget(new ParamControl("IsVagFlkaLogEnabled",
+                                            "Enable FLKA log",
+                                            "Enable Fulltime LKA debug log",
+                                            ""
+                                            ));
+  debug_list->addWidget(horizontal_line());
+  debug_list->addWidget(new ParamControl("IsVagSaccLogEnabled",
+                                            "Enable SACC log",
+                                            "Enable SACC debug log",
+                                            ""
+                                            ));
+  debug_list->addWidget(horizontal_line());
+  debug_list->addWidget(new ParamControl("IsVagAccCutInLogEnabled",
+                                            "Enable ACC cut-in log",
+                                            "Enable ACC cut-in debug log",
+                                            ""
+                                            ));
+
+  debug_list->addStretch(0);
+  QWidget *widget = new QWidget;
+  widget->setLayout(debug_list);
+  return widget;
+}
+
 QWidget * vag_panel() {
   QVBoxLayout *vag_list = new QVBoxLayout();
   vag_list->setSpacing(30);
@@ -104,19 +144,6 @@ QWidget * vag_panel() {
                                             ""
                                             ));
 #endif
-
-  vag_list->addWidget(horizontal_line());
-  vag_list->addWidget(new ParamControl("IsVagDevelopModeEnabled",
-                                            "Enable develop mode",
-                                            "Enable develop mode",
-                                            ""
-                                            ));
-  vag_list->addWidget(horizontal_line());
-  vag_list->addWidget(new ParamControl("IsVagDevelopLogEnabled",
-                                            "Enable develop log",
-                                            "Enable develop log",
-                                            ""
-                                            ));
 
   vag_list->addWidget(horizontal_line());
   vag_list->addWidget(new ButtonControl("Android Settings", "OPEN", "",
@@ -356,6 +383,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Toggles", toggles_panel()},
     {"Developer", new DeveloperPanel()},
     {"VAG", vag_panel()},
+    {"Debug", debug_panel()},
   };
 
   sidebar_layout->addSpacing(45);

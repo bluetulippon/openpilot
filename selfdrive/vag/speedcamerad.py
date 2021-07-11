@@ -30,7 +30,7 @@ class SpeedCameraMapPosition(MapPosition):
 
 class SpeedCamera:
   def __init__(self):
-    print("[PONTEST][speedcamerad.py][__init__()]")
+    print("[PONTEST][SACC][speedcamerad.py][__init__()]")
     self.VehiclePreviousLatitude = (360.1)
     self.VehiclePreviousLongitude = (360.1)
     self.VehiclePreviousSpeedCameraDistance = 0
@@ -85,7 +85,7 @@ class SpeedCamera:
 
 
   def calculate_gps_radian_great_circle_distance(self, Latitude1, Longitude1, Latitude2, Longitude2):
-    #print("[PONTEST][speedcamerad.py][calculate_gps_radian_great_circle_distance()]")
+    #print("[PONTEST][SACC][speedcamerad.py][calculate_gps_radian_great_circle_distance()]")
     R = 6371 # Earth's radius (km)
     d = R * math.acos(math.sin(Decimal(Latitude1)) * math.sin(Decimal(Latitude2)) + \
           math.cos(Decimal(Latitude1)) * math.cos(Decimal(Latitude2)) * math.cos(Decimal(Longitude2) - Decimal(Longitude1)))
@@ -93,7 +93,7 @@ class SpeedCamera:
 
 
   def calculate_gps_radian_haversine_formula_distance(self, Latitude1, Longitude1, Latitude2, Longitude2):
-    #print("[PONTEST][speedcamerad.py][calculate_gps_radian_haversine_formula_distance()]")
+    #print("[PONTEST][SACC][speedcamerad.py][calculate_gps_radian_haversine_formula_distance()]")
     Latitude1Radian = Decimal(Latitude1) * Decimal(math.pi) / 180
     Longitude1Radian = Decimal(Longitude1) * Decimal(math.pi) / 180
     Latitude2Radian = Decimal(Latitude2) * Decimal(math.pi) / 180
@@ -108,7 +108,7 @@ class SpeedCamera:
 
 
   def calculate_position_angle(self, Distance1, Distance2, Distance3):
-    #print("[PONTEST][speedcamerad.py][calculate_position_angle()]")
+    #print("[PONTEST][SACC][speedcamerad.py][calculate_position_angle()]")
     if Distance2 > 0 and Distance3 > 0:
       angle = math.degrees(math.acos((math.pow(Decimal(Distance2), 2) + math.pow(Decimal(Distance3), 2) - math.pow(Decimal(Distance1), 2)) / (2 * (Distance2) * (Distance3))))
     else:
@@ -117,7 +117,7 @@ class SpeedCamera:
 
 
   def recalculate_concentric_layer_all(self, VehicleLatitude, VehicleLongitude, VehicleSpeed):
-    #print("[PONTEST][speedcamerad.py][recalculate_concentric_layer_all()]")
+    #print("[PONTEST][SACC][speedcamerad.py][recalculate_concentric_layer_all()]")
 
     del self.ConcentricLayer1PositionList[:]
     del self.ConcentricLayer2PositionList[:]
@@ -141,17 +141,17 @@ class SpeedCamera:
     self.ConcentricLayer1PositionList.sort(key = lambda s: s.Distance)
     self.ConcentricLayer2PositionList.sort(key = lambda s: s.Distance)
 
-    print("[PONTEST][speedcamerad.py][recalculate_concentric_layer_all()] len(self.ConcentricLayer1PositionList)=", len(self.ConcentricLayer1PositionList))
+    print("[PONTEST][SACC][speedcamerad.py][recalculate_concentric_layer_all()] len(self.ConcentricLayer1PositionList)=", len(self.ConcentricLayer1PositionList))
     #for ConcentricLayer1Item in self.ConcentricLayer1PositionList:
     #  print("ConcentricLayer1Item=", ConcentricLayer1Item.Latitude, ConcentricLayer1Item.Longitude, ConcentricLayer1Item.Direct, ConcentricLayer1Item.SpeedLimit, ConcentricLayer1Item.RoadType, ConcentricLayer1Item.Distance, ConcentricLayer1Item.Angle)
 
-    print("[PONTEST][speedcamerad.py][recalculate_concentric_layer_all()] len(self.ConcentricLayer2PositionList)=", len(self.ConcentricLayer2PositionList))
+    print("[PONTEST][SACC][speedcamerad.py][recalculate_concentric_layer_all()] len(self.ConcentricLayer2PositionList)=", len(self.ConcentricLayer2PositionList))
     #for ConcentricLayer2Item in self.ConcentricLayer2PositionList:
     #  print("ConcentricLayer2Item=", ConcentricLayer2Item.Latitude, ConcentricLayer2Item.Longitude, ConcentricLayer2Item.Direct, ConcentricLayer2Item.SpeedLimit, ConcentricLayer2Item.RoadType, ConcentricLayer1Item.Distance, ConcentricLayer1Item.Angle)
 
 
   def recalculate_concentric_layer1(self, VehicleLatitude, VehicleLongitude, VehicleSpeed):
-    #print("[PONTEST][speedcamerad.py][recalculate_concentric_layer1()]")
+    #print("[PONTEST][SACC][speedcamerad.py][recalculate_concentric_layer1()]")
     for ConcentricLayer1Item in self.ConcentricLayer1PositionList:
       distance2 = self.calculate_gps_radian_haversine_formula_distance(VehicleLatitude, \
                                                                        VehicleLongitude, \
@@ -175,7 +175,7 @@ class SpeedCamera:
 
 
   def add_simulate_vihecle_data(self):
-    print("[PONTEST][speedcamerad.py][add_simulate_vihecle_data()]")
+    print("[PONTEST][SACC][speedcamerad.py][add_simulate_vihecle_data()]")
     #Add vehicle tracke data
     VehiclePath = '/data/openpilot/selfdrive/vag/speedcamera_csv/VehicleTrack.csv'
     try:
@@ -190,7 +190,7 @@ class SpeedCamera:
       return False
 
   def update_events(self, VehicleLatitude, VehicleLongitude, VehicleSpeed):
-    #print("[PONTEST][speedcamerad.py][update_events()]", self.VehicleTrackIndex, VehicleLatitude, VehicleLongitude, VehicleSpeed)
+    #print("[PONTEST][SACC][speedcamerad.py][update_events()]", self.VehicleTrackIndex, VehicleLatitude, VehicleLongitude, VehicleSpeed)
 
     self.recalculate_concentric_layer_all(VehicleLatitude, VehicleLongitude, VehicleSpeed)
     self.recalculate_concentric_layer1(VehicleLatitude, VehicleLongitude, VehicleSpeed)
@@ -289,10 +289,10 @@ class SpeedCamera:
 
 
   def speedcamerad_thread(self):
-    print("[PONTEST][speedcamerad.py][speedcamerad_thread()]")
+    print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()]")
 
     #Simulate
-    print("[PONTEST][speedcamerad.py][speedcamerad_thread()] Simulate")
+    print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] Simulate")
     IsSimluateReady = self.add_simulate_vihecle_data()
     if IsSimluateReady == True:
       while True:
@@ -300,14 +300,14 @@ class SpeedCamera:
           self.update_events(self.VehicleMapPositionList[self.VehicleTrackIndex].Latitude, self.VehicleMapPositionList[self.VehicleTrackIndex].Longitude, 50)
           self.VehicleTrackIndex = self.VehicleTrackIndex + 1
         else:
-          print("[PONTEST][speedcamerad.py][speedcamerad_thread()] Simulate Reset")
+          print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] Simulate Reset")
           break
         time.sleep(0.1) #100 ms
     else:
-      print("[PONTEST][speedcamerad.py][speedcamerad_thread()] Ignore Simulating")
+      print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] Ignore Simulating")
 
     #Real GPS data
-    print("[PONTEST][speedcamerad.py][speedcamerad_thread()] Real GPS data")
+    print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] Real GPS data")
     params = Params()
     IsVagSpeedCameraEnabled = True if (params.get("IsVagSpeedCameraEnabled", encoding='utf8') == "1") else False
     location_sock = messaging.sub_sock('gpsLocationExternal')
@@ -315,7 +315,7 @@ class SpeedCamera:
       if IsVagSpeedCameraEnabled == True:
         location = messaging.recv_sock(location_sock)
         if location:
-          print("[PONTEST][speedcamerad.py][speedcamerad_thread()] location=", \
+          print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] location=", \
                   location.gpsLocationExternal.latitude, \
                   location.gpsLocationExternal.longitude, \
                   location.gpsLocationExternal.altitude, \
@@ -327,17 +327,18 @@ class SpeedCamera:
                              float(location.gpsLocationExternal.speed)*3.6)
         self.VehicleTrackIndex = self.VehicleTrackIndex + 1
       else:
-        print("[PONTEST][speedcamerad.py][speedcamerad_thread()] SpeedCam Disabled")
+        pass
+        print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] SpeedCam Disabled")
       time.sleep(0.5) #500 ms
-    print("[PONTEST][speedcamerad.py][speedcamerad_thread()] end")
+    print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] end")
 
 
 def main():
-  print("[PONTEST][speedcamerad.py][main()]")
+  print("[PONTEST][SACC][speedcamerad.py][main()]")
   time.sleep(3)
   speedcamera = SpeedCamera()
   speedcamera.speedcamerad_thread()
-  print("[PONTEST][speedcamerad.py]Line:", sys._getframe().f_lineno)
+  print("[PONTEST][SACC][speedcamerad.py]Line:", sys._getframe().f_lineno)
 
 
 if __name__ == "__main__":
