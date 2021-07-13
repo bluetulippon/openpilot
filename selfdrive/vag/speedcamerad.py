@@ -260,7 +260,9 @@ class SpeedCamera:
           self.SpeedCameraDetected = False
           sc_send.speedCamera.speedCameraDetected = False
 
-        print("SpeedCamItem=", self.VehicleTrackIndex, VehicleLatitude, VehicleLongitude, VehicleSpeed, \
+        print("IsVagSaccLogEnabled=", IsVagSaccLogEnabled)
+        if IsVagSaccLogEnabled:
+          print("SpeedCamItem=", self.VehicleTrackIndex, VehicleLatitude, VehicleLongitude, VehicleSpeed, \
                 sc_send.speedCamera.vehicleDirect, sc_send.speedCamera.speedCameraDetected, \
                 ConcentricLayer1Item.Latitude, ConcentricLayer1Item.Longitude, \
                 ConcentricLayer1Item.Direct, ConcentricLayer1Item.SpeedLimit, \
@@ -309,13 +311,15 @@ class SpeedCamera:
     #Real GPS data
     print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] Real GPS data")
     params = Params()
-    IsVagSpeedCameraEnabled = True if (params.get("IsVagSpeedCameraEnabled", encoding='utf8') == "1") else False
     location_sock = messaging.sub_sock('gpsLocationExternal')
     while True:
+      IsVagSpeedCameraEnabled = True if (params.get("IsVagSpeedCameraEnabled", encoding='utf8') == "1") else False
+      IsVagSaccLogEnabled = True if (params.get("IsVagSaccLogEnabled", encoding='utf8') == "1") else False
       if IsVagSpeedCameraEnabled == True:
         location = messaging.recv_sock(location_sock)
         if location:
-          print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] location=", \
+          if IsVagSaccLogEnabled:
+            print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] location=", \
                   location.gpsLocationExternal.latitude, \
                   location.gpsLocationExternal.longitude, \
                   location.gpsLocationExternal.altitude, \
@@ -327,8 +331,9 @@ class SpeedCamera:
                              float(location.gpsLocationExternal.speed)*3.6)
         self.VehicleTrackIndex = self.VehicleTrackIndex + 1
       else:
+        if IsVagSaccLogEnabled:
+          print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] SpeedCam Disabled")
         pass
-        print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] SpeedCam Disabled")
       time.sleep(0.5) #500 ms
     print("[PONTEST][SACC][speedcamerad.py][speedcamerad_thread()] end")
 

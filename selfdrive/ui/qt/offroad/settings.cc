@@ -4,6 +4,7 @@
 #include <cassert>
 #include <QComboBox>
 #include <stdlib.h>
+#include <QSlider>
 
 #ifndef QCOM
 #include "networking.hpp"
@@ -24,6 +25,40 @@ QWidget * debug_panel() {
   QVBoxLayout *debug_list = new QVBoxLayout();
   debug_list->setSpacing(30);
 
+  QHBoxLayout* hBoxVolume = new QHBoxLayout();
+  QLabel* labelVolume = new QLabel();
+  QSlider* sliderVolume = new QSlider();
+  QLabel* labelVolumePercentage = new QLabel();
+  labelVolume->setText("Volume");
+  sliderVolume->setOrientation(Qt::Horizontal);
+  sliderVolume->setValue(70);
+  //sliderVolume->initStyleOption(QStyleOptionSlider::SO_ProgressBar);
+  sliderVolume->setRange(0, 100);
+  sliderVolume->sliderMoved(10);
+  sliderVolume->setTickInterval(10);
+  sliderVolume->setWindowTitle("Title");
+  labelVolumePercentage->setText("70%");
+
+  QObject::connect(sliderVolume, SIGNAL(setValue(int)), labelVolumePercentage, SLOT(setText(QString)));
+#if 0
+  sliderVolume->setStyleSheet(R"(
+    QSlider {
+      min-height: 30px;
+      max-height: 30px;
+      background-color: gray
+      border: 1px black;
+      border-radius: 3px;
+      padding: 1px 18px 1px 3px;
+      min-width: 600px;
+      max-width 600px;
+    }
+  )");
+#endif
+  hBoxVolume->addWidget(labelVolume);
+  hBoxVolume->addWidget(sliderVolume);
+  hBoxVolume->addWidget(labelVolumePercentage);
+  debug_list->addLayout(hBoxVolume);
+
   debug_list->addWidget(new ParamControl("IsVagDevelopModeEnabled",
                                             "Enable develop mode",
                                             "Enable develop mode",
@@ -33,6 +68,12 @@ QWidget * debug_panel() {
   debug_list->addWidget(new ParamControl("IsVagDevelopLogEnabled",
                                             "Enable develop log",
                                             "Enable develop log",
+                                            ""
+                                            ));
+  debug_list->addWidget(horizontal_line());
+  debug_list->addWidget(new ParamControl("IsVagRunningProcessLogEnabled",
+                                            "Enable running process log",
+                                            "Enable running process log",
                                             ""
                                             ));
   debug_list->addWidget(horizontal_line());
@@ -73,6 +114,7 @@ QWidget * vag_panel() {
                                               );
   //paramControlIsVagInfoboxEnabled->setSpacing(0);
   vag_list->addWidget(paramControlIsVagInfoboxEnabled);
+
 #if 0
   QComboBox* comboBoxLeftHud1 = new QComboBox();
   comboBoxLeftHud1->addItem("ABC", 0);

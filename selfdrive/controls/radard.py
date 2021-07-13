@@ -199,7 +199,7 @@ def radard_thread(sm=None, pm=None, can_sock=None):
 
   # Pon Hook vag settings for Lead Car
   params = Params()
-  is_vag_lead_car_enabled = True if (params.get("IsVagFulltimeLkaEnabled", encoding='utf8') == "1") else False
+  IsVagAccCutInLogEnabled = True if (params.get("IsVagAccCutInLogEnabled", encoding='utf8') == "1") else False
   print("[PONTEST][ACC cut-in][radard.py][radard_thread()] is_vag_lead_car_enabled=", is_vag_lead_car_enabled)
 
   # TODO: always log leads once we can hide them conditionally

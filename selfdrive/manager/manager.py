@@ -53,6 +53,7 @@ def manager_init():
     ("IsVagSaccEnabled", "0"),
     ("IsVagDevelopModeEnabled", "0"),
     ("IsVagDevelopLogEnabled", "0"),
+    ("IsVagRunningProcessLogEnabled", "0"),
     ("IsVagFlkaLogEnabled", "0"),
     ("IsVagSaccLogEnabled", "0"),
     ("IsVagAccCutInLogEnabled", "0"),
@@ -150,9 +151,11 @@ def manager_thread():
 
     started_prev = started
 
+    IsVagRunningProcessLogEnabled = True if (params.get("IsVagRunningProcessLogEnabled", encoding='utf8') == "1") else False
     running_list = ["%s%s\u001b[0m" % ("\u001b[32m" if p.proc.is_alive() else "\u001b[31m", p.name)
                     for p in managed_processes.values() if p.proc]
-    cloudlog.debug(' '.join(running_list))
+    if IsVagRunningProcessLogEnabled:
+      cloudlog.debug(' '.join(running_list))
 
     # send managerState
     msg = messaging.new_message('managerState')

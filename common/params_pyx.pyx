@@ -97,6 +97,7 @@ keys = {
   b"IsVagSaccEnabled": [TxType.PERSISTENT],
   b"IsVagDevelopModeEnabled": [TxType.PERSISTENT],
   b"IsVagDevelopLogEnabled": [TxType.PERSISTENT],
+  b"IsVagRunningProcessLogEnabled": [TxType.PERSISTENT],
   b"IsVagFlkaLogEnabled": [TxType.PERSISTENT],
   b"IsVagSaccLogEnabled": [TxType.PERSISTENT],
   b"IsVagAccCutInLogEnabled": [TxType.PERSISTENT],
