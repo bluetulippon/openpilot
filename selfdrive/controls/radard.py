@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import importlib
 import math
+import sys
 from collections import defaultdict, deque
 
 import cereal.messaging as messaging
