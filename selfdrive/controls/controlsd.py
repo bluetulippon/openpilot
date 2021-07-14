@@ -292,6 +292,8 @@ class Controls:
 
     self.distance_traveled += CS.vEgo * DT_CTRL
 
+    #print("[PON][FLKA][controlsd.py][data_sample()] self.sm['pandaState'].controlsAllowed=", self.sm['pandaState'].controlsAllowed)
+
     return CS
 
   def state_transition(self, CS):
@@ -406,6 +408,7 @@ class Controls:
 
     # Steering PID loop and lateral MPC
     actuators.steer, actuators.steeringAngleDeg, lac_log = self.LaC.update(self.active, CS, self.CP, self.VM, params, lat_plan)
+    #print("[PON][FLKA][controlsd.py][publish_logs()] actuators.steer=", actuators.steer, " actuators.steeringAngleDeg=", actuators.steeringAngleDeg)
 
     # Check for difference between desired angle and angle for angle based control
     angle_control_saturated = self.CP.steerControlType == car.CarParams.SteerControlType.angle and \
@@ -492,6 +495,7 @@ class Controls:
                               and bool(bool(CS.gearShifter==GearShifter.drive) \
                               or bool(CS.gearShifter==GearShifter.sport) \
                               or bool(CS.gearShifter==GearShifter.manumatic)))
+    #print("[PON][FLKA][controlsd.py][publish_logs()] CC.availableFulltimeLka=", CC.availableFulltimeLka)
 
     if not self.read_only:
       # send car controls over can

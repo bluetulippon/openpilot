@@ -123,7 +123,8 @@ class CarState(CarStateBase):
     # Update ACC setpoint. When the setpoint is zero or there's an error, the
     # radar sends a set-speed of ~90.69 m/s / 203mph.
     ret.cruiseState.speed = ext_cp.vl["ACC_02"]['ACC_Wunschgeschw'] * CV.KPH_TO_MS
-    print("[PONTEST][ACC cut-in][carstate.py][update()] ret.cruiseState.speed=", ret.cruiseState.speed)
+    if IsVagAccCutInLogEnabled == True:
+      print("[PONTEST][ACC cut-in][carstate.py][update()] ret.cruiseState.speed=", ret.cruiseState.speed)
     if ret.cruiseState.speed > 90:
       ret.cruiseState.speed = 0
 
@@ -168,8 +169,6 @@ class CarState(CarStateBase):
     self.parkingBrakeSet = bool(pt_cp.vl["Kombi_01"]['KBI_Handbremse'])  # FIXME: need to include an EPB check as well
     ret.espDisabled = pt_cp.vl["ESP_21"]['ESP_Tastung_passiv'] != 0
 
-
-    #PONTEST
     if IsVagAccCutInLogEnabled == True:
       print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Texte_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Texte_Zusatzanz'])
       print("[PONTEST][ACC cut-in][carstate.py][update()] ACC_Status_Zusatzanz=", ext_cp.vl["ACC_04"]['ACC_Status_Zusatzanz'])

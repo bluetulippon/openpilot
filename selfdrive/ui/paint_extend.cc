@@ -4,8 +4,6 @@
 #include "ui.hpp"
 #include <math.h>
 
-#define DEVELOP_SACC 1
-#if DEVELOP_SACC //PONTEST
 void ui_draw_speed_image(const UIState *s, int x, int y, int w, int h, const char *name) {
   nvgBeginPath(s->vg);
   NVGpaint imgPaint = nvgImagePattern(s->vg, x, y, w, h, 0, s->images.at(name), 1.0f);
@@ -13,7 +11,7 @@ void ui_draw_speed_image(const UIState *s, int x, int y, int w, int h, const cha
   nvgFillPaint(s->vg, imgPaint);
   nvgFill(s->vg);
 }
-#endif
+
 //===== draw text =====
 void ui_draw_hud_text(UIState *s,
                         const int x,
@@ -355,7 +353,6 @@ void ui_draw_blindspot(UIState *s) {
 static bool PreviousSpeedCameraDetected = false;
 static bool SpeedLimitWarningSoundPlayed = false;
 void ui_draw_speedcamera(UIState *s) {
-#if DEVELOP_SACC //PONTEST
   char speedLimit[16];
   char distance[16];
   bool IsVagSpeedLimitSoundEnabled;
@@ -446,7 +443,6 @@ void ui_draw_speedcamera(UIState *s) {
     
   }
   PreviousSpeedCameraDetected = s->scene.speed_camera.getSpeedCameraDetected();
-#endif
 }
 
 //===== draw hud =====

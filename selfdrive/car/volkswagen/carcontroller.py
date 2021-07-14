@@ -62,6 +62,7 @@ class CarController():
         new_steer = int(round(actuators.steer * P.STEER_MAX))
         apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, P)
         self.steer_rate_limited = new_steer != apply_steer
+        #print("[PON][FLKA][carcontroller.py][update()] availableFulltimeLka=", availableFulltimeLka, " new_steer=", new_steer, " apply_steer=", apply_steer, " actuators.steer=", actuators.steer)
 
         # FAULT AVOIDANCE: HCA must not be enabled for >360 seconds. Sending
         # a single frame with HCA disabled is an effective workaround.
@@ -71,9 +72,11 @@ class CarController():
           # many steer torque direction changes. This could be expanded with
           # a small dead-zone to capture all zero crossings, but not seeing a
           # major need at this time.
+          #print("[PON][FLKA][carcontroller.py][update()] 0")
           hcaEnabled = False
           self.hcaEnabledFrameCount = 0
         else:
+          #print("[PON][FLKA][carcontroller.py][update()] 1")
           self.hcaEnabledFrameCount += 1
           if self.hcaEnabledFrameCount >= 118 * (100 / P.HCA_STEP):  # 118s
             # The Kansas I-70 Crosswind Problem: if we truly do need to steer
@@ -82,9 +85,11 @@ class CarController():
             # disabled flag, and keep sending non-zero torque, which keeps the
             # Panda torque rate limiting safety happy. Do so 3x within the 360
             # second window for safety and redundancy.
+            #print("[PON][FLKA][carcontroller.py][update()] 2")
             hcaEnabled = False
             self.hcaEnabledFrameCount = 0
           else:
+            #print("[PON][FLKA][carcontroller.py][update()] 3")
             hcaEnabled = True
             # FAULT AVOIDANCE: HCA torque must not be static for > 6 seconds.
             # This is to detect the sending camera being stuck or frozen. OP
@@ -103,6 +108,8 @@ class CarController():
         # Continue sending HCA_01 messages, with the enable flags turned off.
         hcaEnabled = False
         apply_steer = 0
+
+      #print("[PON][FLKA][carcontroller.py][update()] hcaEnabled", hcaEnabled)
 
       self.apply_steer_last = apply_steer
       idx = (frame / P.HCA_STEP) % 16
